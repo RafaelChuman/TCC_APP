@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">PJI610</string>
+    <string name="user">Usuário</string>
+
+    <string name="name">Nome</string>
+    <string name="password">Senha</string>
+    <string name="smartphone">Celular</string>
+    <string name="telegram">Telegram</string>
+    <string name="email">E-Mail</string>
+
+    <string name="Address">Endereço</string>
+
+    <string name="imgProduct">Imagem do Produto</string>
+
+    <string name="description">Descrição</string>
+
+    <string name="iot">IoT</string>
+    <string name="newIot">Novo IoT</string>
+
+    <string name="group">Grupo</string>
+    <string name="newGroup">Novo Grupo</string>
+
+    <string name="value">Valor</string>
+
+    <string name="logOut">Logout</string>
+    <string name="logIn">Login</string>
+    <string name="remove">Remover</string>
+    <string name="save">Salvar</string>
+
+    <string name="add">Adicionar</string>
+    <string name="addUser">Adicionar Usuário</string>
+
+    <string name="edit">Editar</string>
+    <string name="upload">Carregar</string>
+
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="temperature">Temperatura</string>
+    <string name="humidity">Umidade</string>
+    <string name="noBreak">NoBreak</string>
+
+    <string name="openNav">Abrir</string>
+    <string name="closeNav">Fechar</string>
+
+
+
+</resources>
