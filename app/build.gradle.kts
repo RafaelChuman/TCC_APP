@@ -9,19 +9,19 @@ plugins {
 }
 
 android {
-    namespace = "br.univesp.pji610"
+    namespace = "br.univesp.tcc"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "br.univesp.pji610"
-        minSdk = 34
+        applicationId = "br.univesp.tcc"
+        minSdk = 21
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
-//        kps{
-//            arg("room.schemaLocation", "$projectDir/schemas".toString())
-//        }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas".toString())
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
 
     }
     buildFeatures {
@@ -66,6 +66,9 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.appcompat)
     implementation(libs.listenablefuture)
+    implementation(libs.moshi)
+    implementation(libs.moshi.adapters)
+    implementation(libs.moshi.kotlin)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,9 +77,12 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
 
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+
+    implementation(libs.mpandroidchart)
+    implementation(libs.kotlinx.coroutines.android)
 }
 
 
