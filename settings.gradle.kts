@@ -20,6 +20,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "pji610"
+rootProject.name = "tcc"
 include(":app")
  
