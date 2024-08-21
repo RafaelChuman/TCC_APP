@@ -3,12 +3,9 @@ package br.univesp.tcc.ui.activity
 import android.R
 import android.graphics.Color
 import android.os.Bundle
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -36,7 +33,7 @@ class ChartActivity : Fragment() {
 
     lateinit var linearChart: LineChart
 
-    val purple_700  =  0xFF3700B3
+    //val purple_700  =  0xFF3700B3
     val purple_200 = 0xFFBB86FC
     val purple_500 = 0xFF6200EE
 
@@ -68,10 +65,10 @@ class ChartActivity : Fragment() {
     }
 
 
-    private suspend fun setBarChar() {
+    private fun setBarChar() {
 
-        val typedValue = android.R.attr.colorPrimary
-        val colorPrimary = typedValue.toInt()
+        val colorPrimary = R.attr.colorPrimary
+        //val colorPrimary = typedValue.toInt()
 
         barChart = binding.chartActivityBarChart
 
@@ -89,9 +86,9 @@ class ChartActivity : Fragment() {
         list.add(BarEntry(5f, 219f))
         list.add(BarEntry(6f, 220f))
 
-        var barDataSet = BarDataSet(list, "List")
+        val barDataSet = BarDataSet(list, "List")
 
-        barDataSet.setColors(purple_200.toInt());
+        barDataSet.setColors(purple_200.toInt())
         barDataSet.valueTextColor = Color.WHITE
 
         val barData = BarData(barDataSet)
@@ -105,7 +102,7 @@ class ChartActivity : Fragment() {
     }
 
 
-    private suspend fun setLineChar() {
+    private fun setLineChar() {
 
         linearChart = binding.chartActivityLinearChart
 
@@ -124,16 +121,16 @@ class ChartActivity : Fragment() {
         list.add(Entry(5f, 22.4f))
         list.add(Entry(6f, 22.3f))
 
-        var lineDataSet = LineDataSet(list, "Temperatura")
+        val lineDataSet = LineDataSet(list, "Temperatura")
 
-        lineDataSet.setColors(purple_500.toInt());
+        lineDataSet.setColors(purple_500.toInt())
         lineDataSet.valueTextColor = Color.WHITE
         lineDataSet.valueTextSize = 14f
         lineDataSet.lineWidth = 2f
-        lineDataSet.setDrawFilled(true);
+        lineDataSet.setDrawFilled(true)
         lineDataSet.setFillColor(purple_200.toInt());
-        lineDataSet.setDrawValues(false);
-        lineDataSet.setDrawCircles(false);
+        lineDataSet.setDrawValues(false)
+        lineDataSet.setDrawCircles(false)
 
         val lineData = LineData(lineDataSet)
 
@@ -145,7 +142,7 @@ class ChartActivity : Fragment() {
     }
 
 
-    private suspend fun setPieChar() {
+    private fun setPieChar() {
 
 
 
@@ -159,9 +156,9 @@ class ChartActivity : Fragment() {
         list.add(PieEntry(81f, "81%" ))
         list.add(PieEntry(19f, "19%" ))
 
-        var pieDataSet = PieDataSet(list, "List")
+        val pieDataSet = PieDataSet(list, "List")
 
-        pieDataSet.setColors(purple_500.toInt(), purple_200.toInt()); // Customize colors here
+        pieDataSet.setColors(purple_500.toInt(), purple_200.toInt()) // Customize colors here
         pieDataSet.valueTextColor = Color.WHITE
         pieDataSet.valueTextSize = 15f
 
@@ -172,8 +169,8 @@ class ChartActivity : Fragment() {
         pieChart.description.text = ""
         pieChart.centerText = "Umidade"
         pieChart.legend.isEnabled = false
-        pieChart.setDrawEntryLabels(false);
-        pieChart.setContentDescription("");
+        pieChart.setDrawEntryLabels(false)
+        pieChart.setContentDescription("")
         pieChart.animateY(2000)
     }
 }

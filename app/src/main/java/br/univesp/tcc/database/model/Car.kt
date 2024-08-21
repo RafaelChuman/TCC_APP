@@ -31,6 +31,7 @@ data class Car(
     val color: String,
     @ColumnInfo(index = true)
     val createdAt: String,
+    @ColumnInfo(index = true)
     val userId: String,
     val deleted: Boolean,
     val updated: String,

@@ -16,7 +16,7 @@ import br.univesp.tcc.databinding.ActivityItemBinding
 import br.univesp.tcc.ui.recyclerview.ItemRecycleView
 import kotlinx.coroutines.launch
 
-private const val TAG = "GroupIotActivity"
+private const val TAG = "ItemActivity"
 
 class ItemActivity : Fragment() {
 
@@ -52,7 +52,7 @@ class ItemActivity : Fragment() {
         super.onCreate(savedInstanceState)
 
         binding.activityItemFab.setOnClickListener {
-            setFab(it)
+            setFab()
         }
     }
 
@@ -71,7 +71,7 @@ class ItemActivity : Fragment() {
             }
     }
 
-    fun setFab(view: View) {
+    fun setFab() {
         val intent = Intent(requireActivity(), ItemMgmtActivity::class.java)
         startActivity(intent)
     }

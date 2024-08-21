@@ -42,7 +42,7 @@
         <activity
             android:name=".ui.activity.InsertUserActivity"
             android:exported="false"
-            android:theme="@style/Theme.pji610" />
+             />
         <activity
             android:name=".ui.activity.LoginActivity"
             android:exported="true"

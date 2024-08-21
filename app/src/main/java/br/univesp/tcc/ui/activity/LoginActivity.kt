@@ -27,8 +27,8 @@ class LoginActivity : AppCompatActivity() {
 
     private val authenticationRepository by lazy {
         AuthenticationRepository(
-            DataSource.instance(this).UserTokenDAO(),
-            AuthenticationWebClient(),
+            userTokenDAO,
+            authenticationWebClient,
             dataStore
         )
     }
@@ -77,16 +77,18 @@ class LoginActivity : AppCompatActivity() {
             val isAuthenticated = authenticationRepository.authenticateUser(userName, password)
 
             if(isAuthenticated){
-                RedirectTo(CarActivity::class.java)
+                RedirectTo(NavigationDrawer::class.java)
                 finish()
                 ToastMessage("Usuário Authenticado.")
             }
+            else{
+                ToastMessage("Falha na autenticação.")
+            }
 
-            ToastMessage("Falha na autenticação.")
         }
     }
 
-    fun authenticationOnClick(view: View) {
+    fun authenticationOnClick(view:View) {
 
         val userName = binding.activityLoginTextInputEditTextUserName.text.toString()
         val password = binding.activityLoginTextInputEditTextPassword.text.toString()
@@ -96,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
 
     fun addUserOnClick(view: View) {
         binding.activityLoginButtonAddUser.setOnClickListener {
-            RedirectTo(InsertUserActivity::class.java)
+            RedirectTo(NavigationDrawer::class.java)
         }
     }
 }

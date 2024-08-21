@@ -27,6 +27,7 @@ data class OrderAndItems(
     val id: String= UUID.randomUUID().toString(),
     @ColumnInfo(index = true)
     val orderId: String,
+    @ColumnInfo(index = true)
     val itemId: String,
     val quantity: Int,
     val price: Double,

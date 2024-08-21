@@ -1,6 +1,5 @@
 package br.univesp.tcc.webclient
 
-import br.univesp.tcc.webclient.model.UserJsonAdapter
 import br.univesp.tcc.webclient.services.AuthenticationService
 import br.univesp.tcc.webclient.services.UserService
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

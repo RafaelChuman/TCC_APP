@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 class UserRepository (private val dao: UserDao,
     private val userWebClient: UserWebClient){
 
-    fun getUsers() : Flow<List<User>>?{
+    fun getUsers() : Flow<List<User>?>{
         return dao.getAll()
     }
 

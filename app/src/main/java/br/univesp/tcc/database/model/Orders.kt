@@ -24,7 +24,9 @@ import androidx.room.PrimaryKey
 data class Orders(
     @PrimaryKey(autoGenerate = false)
     val id: String,
+    @ColumnInfo(index = true)
     val userId: String,
+    @ColumnInfo(index = true)
     val carId: String,
     val km: Int,
     val fuel: Double,

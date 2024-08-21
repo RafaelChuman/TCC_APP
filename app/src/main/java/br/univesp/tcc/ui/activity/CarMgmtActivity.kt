@@ -148,14 +148,14 @@ class CarMgmtActivity : AuthBaseActivity() {
 
 
     private fun createNewCar(): Car {
-        val name = binding.activityCarEditTextName.text.toString()
+        val brand = binding.activityCarEditTextName.text.toString()
 
         return carID?.let { id ->
             Car(
                 id = id,
-                 yearOfFabrication = 2007,
+                yearOfFabrication = 2007,
                 kind = "Passeio",
-                brand = "Chevrolet",
+                brand = brand,
                 updated = "",
                 deleted = false,
                 type = "automóvel",
@@ -170,7 +170,7 @@ class CarMgmtActivity : AuthBaseActivity() {
             Car(
                 yearOfFabrication = 2007,
                 kind = "Passeio",
-                brand = "Chevrolet",
+                brand = brand,
                 updated = "",
                 deleted = false,
                 type = "automóvel",

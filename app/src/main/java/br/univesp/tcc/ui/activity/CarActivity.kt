@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import br.univesp.tcc.database.DataSource
 import br.univesp.tcc.databinding.ActivityCarBinding
+import br.univesp.tcc.databinding.ActivityInsertUserBinding
 import br.univesp.tcc.ui.recyclerview.CarRecycleView
 import kotlinx.coroutines.launch
 
@@ -36,24 +37,30 @@ class CarActivity : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+//        super.onCreate(savedInstanceState)
+//
+//        binding = ActivityCarBinding.inflate(layoutInflater)
+        //setContentView(binding.root)
+
         binding = ActivityCarBinding.inflate(inflater, container, false)
 
-        configRecyclerView()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                getAllCarOfUser("")
-            }
-        }
-
-        return binding.root
+//        configRecyclerView()
+//
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                getAllCarOfUser("")
+//            }
+//        }
+//
+       return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.activityCarFloatingButton.setOnClickListener {
-            setFab(it)
+            setFab()
         }
     }
 
@@ -82,7 +89,7 @@ class CarActivity : Fragment() {
         }
     }
 
-    fun setFab(view: View) {
+    fun setFab() {
         val intent = Intent(requireActivity(), CarMgmtActivity::class.java)
         startActivity(intent)
     }

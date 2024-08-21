@@ -32,7 +32,7 @@ class InsertUserActivity : AppCompatActivity() {
 
     }
 
-    fun insertOnClick(view: View)  {
+    fun insertOnClick(view:View)  {
 
         val newUser = creatUser()
 
