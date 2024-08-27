@@ -17,4 +17,7 @@ interface UserTokenDAO {
 
     @Query("""DELETE FROM UserToken WHERE userId = :userId""")
     suspend fun delToken(userId: String)
+
+    @Query("""DELETE FROM UserToken""")
+    suspend fun delAllToken()
 }

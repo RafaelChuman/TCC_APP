@@ -26,18 +26,18 @@ import kotlinx.coroutines.launch
 
 private const val TAG = "NavigationDrawer"
 
-class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
 
     private lateinit var drawerLayout: DrawerLayout
 
 
-    private val userDao by lazy {
-        DataSource.instance(this).UserDao()
-    }
+//    private val userDao by lazy {
+//        DataSource.instance(this).UserDao()
+//    }
 
-    private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
-    protected val user: StateFlow<User?> = _user
+//    private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
+//    protected val user: StateFlow<User?> = _user
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,9 +50,9 @@ class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSel
         val navigationView = findViewById<NavigationView>(R.id.drawer_navigation_navigationView)
 
 
-        lifecycleScope.launch {
-           //checkAuthentication()
-        }
+//        lifecycleScope.launch {
+//           //checkAuthentication()
+//        }
 
 
         setSupportActionBar(toolbar)
@@ -77,6 +77,7 @@ class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        Log.i(TAG,"onNavigationItemSelected: $item.itemId")
         when (item.itemId) {
             R.id.navigation_menu_home -> supportFragmentManager.beginTransaction()
                 .replace(R.id.drawer_navigation_frameLayout, CarActivity()).commit()
@@ -88,6 +89,7 @@ class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 .replace(R.id.drawer_navigation_frameLayout, ItemActivity()).commit()
 
             R.id.navigation_menu_logout -> lifecycleScope.launch {
+                Log.i(TAG,"onNavigationItemSelected: navigation_menu_logout")
                 logout()
             }
         }
@@ -121,36 +123,36 @@ class NavigationDrawer : AppCompatActivity(), NavigationView.OnNavigationItemSel
 
 
 
-    private suspend fun checkAuthentication() {
-        dataStore.data.collect { preferences ->
-            preferences[userIdLogged]?.let { userId ->
+//    private suspend fun checkAuthentication() {
+//        dataStore.data.collect { preferences ->
+//            preferences[userIdLogged]?.let { userId ->
+//
+//                Log.i(TAG,"checkAuthentication: ${preferences[userIdLogged]}")
+//                getUserById(userId)
+//            } ?: redirectToLogin()
+//        }
+//    }
 
-                Log.i(TAG,"checkAuthentication: ${preferences[userIdLogged]}")
-                getUserById(userId)
-            } ?: redirectToLogin()
-        }
+//    private suspend fun getUserById(userId: String): User? {
+//        return userDao.getById(userId).firstOrNull().also { usr ->
+//
+//            Log.i(TAG,"getUserById: $usr")
+//            _user.value = usr
+//        }
+//
+//    }
+
+    private suspend fun logout() {
+
+        this.redirectToLogin()
+
     }
 
-    private suspend fun getUserById(userId: String): User? {
-        return userDao.getById(userId).firstOrNull().also { usr ->
-
-            Log.i(TAG,"getUserById: $usr")
-            _user.value = usr
-        }
-
-    }
-
-    protected suspend fun logout() {
-        dataStore.edit { preferences ->
-            preferences.remove(userIdLogged)
-        }
-    }
-
-    private fun redirectToLogin() {
-        Log.i(TAG,"redirectToLogin")
-        RedirectTo(LoginActivity::class.java) {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        }
-        finish()
-    }
+//    private fun redirectToLogin() {
+//        Log.i(TAG,"redirectToLogin")
+//        RedirectTo(LoginActivity::class.java) {
+//            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//        }
+//        finish()
+//    }
 }

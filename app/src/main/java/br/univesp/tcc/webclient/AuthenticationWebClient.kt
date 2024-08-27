@@ -26,4 +26,16 @@ class AuthenticationWebClient {
             return null
         }
     }
+
+
+    suspend fun isTokenValid(token: String): Response<Boolean>?
+    {
+        try {
+            return authenticationService.isTokenValid(token)
+
+        } catch (e: Exception) {
+            Log.e(TAG, "isTokenValid", e)
+            return null
+        }
+    }
 }
