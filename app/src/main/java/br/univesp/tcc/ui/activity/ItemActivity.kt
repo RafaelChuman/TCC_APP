@@ -12,21 +12,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import br.univesp.tcc.database.DataSource
-<<<<<<<< HEAD:app/src/main/java/br/univesp/tcc/ui/activity/ItemActivity.kt
 import br.univesp.tcc.databinding.ActivityItemBinding
 import br.univesp.tcc.ui.recyclerview.ItemRecycleView
 import kotlinx.coroutines.launch
 
 private const val TAG = "ItemActivity"
-========
-import br.univesp.tcc.databinding.ActivityGroupIotBinding
-import br.univesp.tcc.ui.recyclerview.GroupIotRecycleView
-import kotlinx.coroutines.launch
 
-private const val TAG = "GroupIotActivity"
-
-class GroupIotActivity : Fragment() {
->>>>>>>> origin/master:app/src/main/java/br/univesp/tcc/ui/activity/GroupIotActivity.kt
 
 class ItemActivity : Fragment() {
 

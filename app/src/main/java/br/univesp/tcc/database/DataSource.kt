@@ -18,7 +18,7 @@ import br.univesp.tcc.database.model.User
 import br.univesp.tcc.database.model.UserToken
 
 @Database(
-    version = 4,
+    version = 5,
     entities = [User::class, Car::class, Item::class, Orders::class, OrderAndItems::class, UserToken::class],
     exportSchema = true
 )
