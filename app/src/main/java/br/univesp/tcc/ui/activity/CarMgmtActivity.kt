@@ -10,8 +10,14 @@ import android.widget.ArrayAdapter
 import androidx.lifecycle.lifecycleScope
 import br.univesp.tcc.R
 import br.univesp.tcc.database.DataSource
+<<<<<<<< HEAD:app/src/main/java/br/univesp/tcc/ui/activity/CarMgmtActivity.kt
 import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.databinding.ActivityCarMgmtBinding
+========
+import br.univesp.tcc.database.model.GroupIoT
+import br.univesp.tcc.database.model.IoT
+import br.univesp.tcc.databinding.ActivityIotMgmtBinding
+>>>>>>>> origin/master:app/src/main/java/br/univesp/tcc/ui/activity/IotMgmtActivity.kt
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
