@@ -1,40 +1,9 @@
 package br.univesp.tcc.webclient.model
 
-import br.univesp.tcc.database.model.User
-import com.squareup.moshi.FromJson
-import com.squareup.moshi.ToJson
-
-
-class UserResponse (
-    val id: String?,
-    val name: String?,
-    val userName: String?,
-    val password: String?,
-    val imgPath: String?,
-    val email: String?,
-    val cellphone: String?,
-    val telegram: String?,
-    val isAdmin: Boolean?,
-    val createdAt: String?,
-    val deleted: Boolean?,
-    val updated: String?,
-){
-    val user: User get() = User(
-        id = id?: "",
-        name = name ?: "",
-        userName = userName?: "",
-        password = password?: "",
-        imgPath = imgPath?: "",
-        email = email?: "",
-        cellphone = cellphone?: "",
-        telegram = telegram?: "",
-        isAdmin = isAdmin?: false,
-        createdAt = createdAt?: "",
-        deleted = deleted?: false,
-        updated = updated?:  ""
-    )
-
-}
+data class AuthenticateDTO(
+    val userName: String,
+    val password: String,
+)
 
 //class UserJsonAdapter {
 //    @FromJson

@@ -25,6 +25,7 @@ data class Car(
     val model: String,
     val kind: String,
     val type: String,
+    @ColumnInfo(index = true)
     val plate: String,
     val yearOfFabrication: Int,
     val yearOfModel: Int,

@@ -1,6 +1,10 @@
 package br.univesp.tcc.webclient
 
 import br.univesp.tcc.webclient.services.AuthenticationService
+import br.univesp.tcc.webclient.services.CarService
+import br.univesp.tcc.webclient.services.ItemService
+import br.univesp.tcc.webclient.services.OrderAndItemsService
+import br.univesp.tcc.webclient.services.OrdersService
 import br.univesp.tcc.webclient.services.UserService
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
@@ -23,4 +27,11 @@ class RetrofitInicializador {
 
     val authenticationService = retrofit.create(AuthenticationService::class.java)
 
+    val carService = retrofit.create(CarService::class.java)
+
+    val itemService = retrofit.create(ItemService::class.java)
+
+    val ordersService = retrofit.create(OrdersService::class.java)
+
+    val orderAndItemsService = retrofit.create(OrderAndItemsService::class.java)
 }

@@ -1,6 +1,7 @@
 package br.univesp.tcc.database.model
 
 import androidx.datastore.preferences.protobuf.Internal.BooleanList
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -12,7 +13,9 @@ data class Item(
     @PrimaryKey(autoGenerate = false)
     val id: String= UUID.randomUUID().toString(),
     val type: String,
+    @ColumnInfo(index = true)
     val name: String,
+    @ColumnInfo(index = true)
     val createdAt: String,
     val deleted: Boolean,
     val updated: String,

@@ -13,9 +13,8 @@ class UserRepository (private val dao: UserDao,
     }
 
     suspend fun updateUser(){
-        userWebClient.getUsers()?.let {
+        userWebClient.list()?.let {
             users -> dao.saveAll(users)
-
         }
     }
 

@@ -13,10 +13,7 @@ data class UserToken (
 )
 
 
-data class AuthenticatePost (
-    val userName: String,
-    val password: String,
-)
+
 
 
 
