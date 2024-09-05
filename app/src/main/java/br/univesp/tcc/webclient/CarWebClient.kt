@@ -13,6 +13,19 @@ class CarWebClient {
 
     private val carService = RetrofitInicializador().carService
 
+    suspend fun listAll(): List<Car>?
+    {
+        try {
+            val listResp = carService.listAll()
+
+            return listResp.body()
+        } catch (e: Exception) {
+            Log.e(TAG, "listCarByUser", e)
+
+        }
+        return null
+    }
+
     suspend fun listCarByUser(userId: String): List<Car>?
     {
          try {
@@ -22,6 +35,31 @@ class CarWebClient {
         } catch (e: Exception) {
             Log.e(TAG, "listCarByUser", e)
 
+        }
+        return null
+    }
+
+    suspend fun listCarById(id: List<String>): Car?
+    {
+        try {
+            val listResp = carService.listCarById(id)
+
+            return listResp.body()
+        } catch (e: Exception) {
+            Log.e(TAG, "listCarById", e)
+
+        }
+        return null
+    }
+
+    suspend fun listCarByPlate(plate: List<String>): List<Car>?
+    {
+        try {
+            val listResp = carService.listCarByPlate( plate)
+
+            return listResp.body()
+        } catch (e: Exception) {
+            Log.e(TAG, "listCarByPlate", e)
         }
         return null
     }
@@ -52,10 +90,10 @@ class CarWebClient {
         return null
     }
 
-    suspend fun delete(data: DTODeleteCar): Car?
+    suspend fun delete(id: List<String>): Car?
     {
         try {
-            val listResp = carService.delete(data)
+            val listResp = carService.delete(id)
 
             return listResp.body()
         } catch (e: Exception) {

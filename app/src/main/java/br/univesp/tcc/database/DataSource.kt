@@ -1,9 +1,11 @@
 package br.univesp.tcc.database
 
+import Converters
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import br.univesp.tcc.database.dao.CarDAO
 import br.univesp.tcc.database.dao.ItemDAO
 import br.univesp.tcc.database.dao.OrderAndItemsDAO
@@ -22,6 +24,7 @@ import br.univesp.tcc.database.model.UserToken
     entities = [User::class, Car::class, Item::class, Orders::class, OrderAndItems::class, UserToken::class],
     exportSchema = true
 )
+@TypeConverters(Converters::class)
 abstract class DataSource : RoomDatabase() {
 
     abstract fun UserDao(): UserDao

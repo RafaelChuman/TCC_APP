@@ -27,6 +27,14 @@ class DTOUpdateCar (
     val user: User,
 )
 
+class DTOListCarById (
+    val id: List<String>,
+)
+
+class DTOListCarByPlate (
+    val id: List<String>,
+)
+
 class DTODeleteCar (
-    id: List<String>,
+    val id: List<String>,
 )

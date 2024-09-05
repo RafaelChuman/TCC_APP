@@ -5,13 +5,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import br.univesp.tcc.database.model.Car
+import br.univesp.tcc.webclient.model.DTOListCarById
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CarDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(car: Car):Long
+    suspend fun save(car: List<Car>):Long
 
     @Query(
         """
@@ -22,21 +23,33 @@ interface CarDAO {
         AND Car.deleted = 0
         """
     )
-    fun getAllByUser(userId: String): Flow<List<Car>>?
+    fun getByUser(userId: String): Flow<List<Car>>?
 
     @Query(
         """
         SELECT * 
         FROM Car
-        WHERE id = :carId
+        WHERE id IN (:id)
         AND Car.deleted = 0"""
     )
     fun getById(
-        carId: String,
-    ): Flow<Car>?
+        id: List<String>,
+    ): List<Car>?
 
-    @Query("UPDATE Car set deleted = 1 WHERE id = :carId")
-    suspend fun remove(carId: String)
+    @Query(
+        """
+        SELECT * 
+        FROM Car
+        WHERE plate IN (:plate)
+        AND Car.deleted = 0"""
+    )
+    fun getByPlate(
+        plate: List<String>,
+    ): List<Car>?
+
+    @Query("UPDATE Car set deleted = 1 WHERE id IN (:id) ")
+    suspend fun remove(id: List<String>)
+
 
     @Query("""SELECT * FROM Car WHERE Car.deleted = 0 """)
     fun getAll(): Flow<List<Car>>?
