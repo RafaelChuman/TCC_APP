@@ -1,27 +1,19 @@
 package br.univesp.tcc.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.datastore.preferences.core.edit
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import br.univesp.tcc.R
-import br.univesp.tcc.database.DataSource
-import br.univesp.tcc.database.model.User
-import br.univesp.tcc.extensions.RedirectTo
-import br.univesp.tcc.extensions.dataStore
-import br.univesp.tcc.extensions.userIdLogged
+import br.univesp.tcc.ui.AuthBaseActivity
+import br.univesp.tcc.ui.CarActivity
+import br.univesp.tcc.ui.UserActivity
 import com.google.android.material.navigation.NavigationView
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 private const val TAG = "NavigationDrawer"
@@ -30,15 +22,6 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
 
 
     private lateinit var drawerLayout: DrawerLayout
-
-
-//    private val userDao by lazy {
-//        DataSource.instance(this).UserDao()
-//    }
-
-//    private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
-//    protected val user: StateFlow<User?> = _user
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,16 +32,12 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
         val toolbar = findViewById<Toolbar>(R.id.drawer_navigation_toolbar)
         val navigationView = findViewById<NavigationView>(R.id.drawer_navigation_navigationView)
 
-
 //        lifecycleScope.launch {
 //           //checkAuthentication()
 //        }
-
-
         setSupportActionBar(toolbar)
 
         navigationView.setNavigationItemSelectedListener(this)
-
 
         val toggle =
             ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openNav, R.string.closeNav)
@@ -70,14 +49,10 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
                 .replace(R.id.drawer_navigation_frameLayout, ChartActivity()).commit()
             navigationView.setCheckedItem(R.id.navigation_menu_home)
         }
-
-
-
     }
 
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        Log.i(TAG,"onNavigationItemSelected: $item.itemId")
+        Log.i(TAG, "onNavigationItemSelected: $item.itemId")
         when (item.itemId) {
             R.id.navigation_menu_home -> supportFragmentManager.beginTransaction()
                 .replace(R.id.drawer_navigation_frameLayout, CarActivity()).commit()
@@ -88,8 +63,11 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
             R.id.navigation_menu_group -> supportFragmentManager.beginTransaction()
                 .replace(R.id.drawer_navigation_frameLayout, ItemActivity()).commit()
 
+            R.id.navigation_menu_user -> supportFragmentManager.beginTransaction()
+                .replace(R.id.drawer_navigation_frameLayout, UserActivity()).commit()
+
             R.id.navigation_menu_logout -> lifecycleScope.launch {
-                Log.i(TAG,"onNavigationItemSelected: navigation_menu_logout")
+                Log.i(TAG, "onNavigationItemSelected: navigation_menu_logout")
                 logout()
             }
         }
@@ -98,20 +76,9 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
         return true
     }
 
-
-//    @Deprecated("This method has been deprecated in favor of using the\n      {@link OnBackPressedDispatcher} via {@link #getOnBackPressedDispatcher()}.\n      The OnBackPressedDispatcher controls how back button events are dispatched\n      to one or more {@link OnBackPressedCallback} objects.")
-//    override fun onBackPressed(){
-//
-//        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-//            drawerLayout.closeDrawer(GravityCompat.START)
-//        }else{
-//            super.onBackPressed()
-//        }
-//    }
-
     override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
 
-        if(::drawerLayout.isInitialized) {
+        if (::drawerLayout.isInitialized) {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
                 drawerLayout.closeDrawer(GravityCompat.START)
             }
@@ -119,40 +86,9 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
         return super.getOnBackInvokedDispatcher()
     }
 
-
-
-
-
-//    private suspend fun checkAuthentication() {
-//        dataStore.data.collect { preferences ->
-//            preferences[userIdLogged]?.let { userId ->
-//
-//                Log.i(TAG,"checkAuthentication: ${preferences[userIdLogged]}")
-//                getUserById(userId)
-//            } ?: redirectToLogin()
-//        }
-//    }
-
-//    private suspend fun getUserById(userId: String): User? {
-//        return userDao.getById(userId).firstOrNull().also { usr ->
-//
-//            Log.i(TAG,"getUserById: $usr")
-//            _user.value = usr
-//        }
-//
-//    }
-
     private suspend fun logout() {
 
         this.redirectToLogin()
 
     }
-
-//    private fun redirectToLogin() {
-//        Log.i(TAG,"redirectToLogin")
-//        RedirectTo(LoginActivity::class.java) {
-//            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//        }
-//        finish()
-//    }
 }

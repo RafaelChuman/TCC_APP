@@ -9,24 +9,23 @@ import br.univesp.tcc.R
 import br.univesp.tcc.database.DataSource
 import br.univesp.tcc.database.model.Item
 import br.univesp.tcc.databinding.ActivityItemMgmtBinding
+import br.univesp.tcc.ui.AuthBaseActivity
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 private const val TAG = "ItemMgmtActivity"
 
-
 class ItemMgmtActivity : AuthBaseActivity() {
+
+    private val binding by lazy {
+        ActivityItemMgmtBinding.inflate(layoutInflater)
+    }
 
     private var itemId: String? = null
 
     private val itemDAO by lazy {
-        DataSource.instance(this).ItemDAO()
-    }
-
-
-    private val binding by lazy {
-        ActivityItemMgmtBinding.inflate(layoutInflater)
+        DataSource.getDatabase(this).ItemDAO()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

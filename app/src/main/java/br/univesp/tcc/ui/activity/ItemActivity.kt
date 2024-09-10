@@ -13,11 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import br.univesp.tcc.database.DataSource
 import br.univesp.tcc.databinding.ActivityItemBinding
-import br.univesp.tcc.ui.recyclerview.ItemRecycleView
+import br.univesp.tcc.ui.ItemRecycleView
 import kotlinx.coroutines.launch
 
 private const val TAG = "ItemActivity"
-
 
 class ItemActivity : Fragment() {
 
@@ -28,7 +27,7 @@ class ItemActivity : Fragment() {
     }
 
     private val itemDao by lazy {
-        DataSource.instance(requireContext()).ItemDAO()
+        DataSource.getDatabase(requireContext()).ItemDAO()
     }
 
     override fun onCreateView(
@@ -72,7 +71,7 @@ class ItemActivity : Fragment() {
             }
     }
 
-    fun setFab() {
+    private fun setFab() {
         val intent = Intent(requireActivity(), ItemMgmtActivity::class.java)
         startActivity(intent)
     }

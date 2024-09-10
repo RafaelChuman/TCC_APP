@@ -25,11 +25,11 @@
             android:exported="false"
             android:theme="@style/Theme.pji610" />
         <activity
-            android:name=".ui.activity.CarMgmtActivity"
+            android:name=".ui.CarMgmtActivity"
             android:exported="false"
             android:theme="@style/Theme.pji610" />
         <activity
-            android:name=".ui.activity.CarActivity"
+            android:name=".ui.CarActivity"
             android:exported="false"
             android:theme="@style/Theme.pji610" />
         <activity
@@ -37,14 +37,16 @@
             android:exported="false"
             android:theme="@style/Theme.pji610" />
         <activity
-            android:name=".ui.activity.AuthBaseActivity"
+            android:name=".ui.AuthBaseActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.InsertUserActivity"
-            android:exported="false"
-             />
+            android:name=".ui.UserMgmtActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.UserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.LoginActivity"
             android:exported="true"
 
             android:theme="@style/Theme.pji610">

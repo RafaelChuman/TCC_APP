@@ -1,6 +1,5 @@
 package br.univesp.tcc.database
 
-import Converters
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -18,14 +17,19 @@ import br.univesp.tcc.database.model.OrderAndItems
 import br.univesp.tcc.database.model.Orders
 import br.univesp.tcc.database.model.User
 import br.univesp.tcc.database.model.UserToken
+import com.squareup.moshi.Moshi
+import retrofit2.converter.moshi.MoshiConverterFactory
+import com.squareup.moshi.JsonAdapter;
+import java.time.LocalDateTime
+
 
 @Database(
-    version = 5,
+    version = 7,
     entities = [User::class, Car::class, Item::class, Orders::class, OrderAndItems::class, UserToken::class],
     exportSchema = true
 )
-@TypeConverters(Converters::class)
-abstract class DataSource : RoomDatabase() {
+@TypeConverters(LocalDateTimeConverter::class) // Adiciona os conversores
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun UserDao(): UserDao
 
@@ -38,27 +42,68 @@ abstract class DataSource : RoomDatabase() {
     abstract fun OrderAndItemsDAO(): OrderAndItemsDAO
 
     abstract fun UserTokenDAO(): UserTokenDAO
+}
 
-    companion object {
-        @Volatile
-        private var db: DataSource? = null
+object DataSource {
 
-        fun instance(context: Context): DataSource {
-            return db ?: Room.databaseBuilder(
-                context,
-                DataSource::class.java,
+    @Volatile
+    private var INSTANCE: AppDatabase? = null
+
+    fun getDatabase(context: Context): AppDatabase {
+        // Verificar se a instância já existe, se não, cria uma nova
+        return INSTANCE ?: synchronized(this) {
+            val instance = Room.databaseBuilder(
+                context.applicationContext,
+                AppDatabase::class.java,
                 "tcc.db"
-            ).fallbackToDestructiveMigration().build()
+            )
+                .fallbackToDestructiveMigration()  // Usado para recriar o banco de dados em caso de mudanças
+                .build()
+
+            INSTANCE = instance
+            instance
         }
     }
 }
 
 
-//addMigrations(
-//MIGRATION_1_2,
-//MIGRATION_2_3,
-//MIGRATION_3_4,
-//MIGRATION_4_5,
-//MIGRATION_5_6).build()
+//
+//@Database(
+//    version = 7,
+//    entities = [User::class, Car::class, Item::class, Orders::class, OrderAndItems::class, UserToken::class],
+//    exportSchema = true
+//)
+//@TypeConverters(Converters::class) // Adiciona os conversores
+//abstract class DataSource : RoomDatabase() {
+//
+//    abstract fun UserDao(): UserDao
+//
+//    abstract fun CarDAO(): CarDAO
+//
+//    abstract fun ItemDAO(): ItemDAO
+//
+//    abstract fun OrdersDAO(): OrdersDAO
+//
+//    abstract fun OrderAndItemsDAO(): OrderAndItemsDAO
+//
+//    abstract fun UserTokenDAO(): UserTokenDAO
+//
+//
+//    companion object {
+//        @Volatile
+//        private var db: DataSource? = null
+//
+//        fun instance(context: Context): DataSource {
+//
+//
+//            return db ?: Room.databaseBuilder(
+//                context,
+//                DataSource::class.java,
+//                "tcc.db"
+//            ).fallbackToDestructiveMigration().build()
+//        }
+//    }
+//}
+
 
 

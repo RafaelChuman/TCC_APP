@@ -43,7 +43,16 @@
 
     <string name="openNav">Abrir</string>
     <string name="closeNav">Fechar</string>
-
+    <string name="userName">nome Usuário</string>
+    <string name="isAdmin">Administrador</string>
+    <string name="checkPassword">Confirme a Senha</string>
+    <string name="imgPath">Selecione a Imagem de Perfil</string>
+    <string name="cellphone">Número Celular\n</string>
+    <string name="cliente">Cliente</string>
+    <string name="client">Cliente</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="newUser">Novo Cliente</string>
 
 
 </resources>

@@ -12,10 +12,10 @@ class UserWebClient {
 
     private val userService = RetrofitInicializador().userService
 
-    suspend fun create(data: DTOCreateUser): List<User>?
+    suspend fun create(user: User): List<User>?
     {
         try {
-            val listResp = userService.create(data)
+            val listResp = userService.create(listOf(user))
 
             return listResp.body()
         } catch (e: Exception) {
@@ -49,14 +49,15 @@ class UserWebClient {
     }
 
 
-    suspend fun list(): List<User>?
+    suspend fun list(userToken:String): List<User>?
     {
+        Log.i(TAG, "list")
         try {
-            val listResp = userService.list()
+            val listResp = userService.list(userToken)
 
             return listResp.body()
         } catch (e: Exception) {
-            Log.e(TAG, "list", e)
+            Log.e(TAG, "list - error:", e)
         }
         return null
     }

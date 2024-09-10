@@ -18,17 +18,20 @@ import java.time.LocalDateTime
 import java.util.Calendar
 import java.util.UUID
 
+private const val TAG = "CarRepository"
+
 class CarRepository(
     private val carDAO: CarDAO,
     private val carWebClient: CarWebClient
 ) {
 
-    suspend fun getCar(userId: String): List<Car>? {
-        val cars = carDAO.getAll()?.single()
+    suspend fun syncCarWithAPI(): List<Car>? {
+
+        val cars = carDAO.getAll().single()
         val carWeb = carWebClient.listAll()
         val updList : MutableList<Car> = mutableListOf<Car>()
 
-        if(cars == null) return null
+        if(cars.isEmpty()) return null
         if(carWeb == null) return null
 
         for(car in  cars)
@@ -46,10 +49,11 @@ class CarRepository(
     }
 
 
-    suspend fun insert(userId: String, newCar: DTOCreateCar) {
+    suspend fun insert(newCar: DTOCreateCar) {
 
-        val createdAt = Calendar.getInstance().time.toString()
-        val car: Car = Car(
+        val createdAt = LocalDateTime.now()
+
+        val car = Car(
             id = UUID.randomUUID().toString(),
             brand = newCar.brand,
             model = newCar.model,
@@ -59,10 +63,10 @@ class CarRepository(
             yearOfFabrication = newCar.yearOfFabrication,
             yearOfModel = newCar.yearOfModel,
             color = newCar.color,
-            createdAt = createdAt,
+            createdAt =  createdAt,
             userId = newCar.user.id,
             deleted = false,
-            updated =  LocalDateTime.now(),
+            updated =  createdAt,
         )
 
         carDAO.save( listOf(car) )
@@ -75,14 +79,14 @@ class CarRepository(
         }
     }
 
-    suspend fun update(userId: String, updCar: DTOUpdateCar) {
+    suspend fun update(updCar: DTOUpdateCar) {
 
         val updated = LocalDateTime.now()
         val data: List<String> = listOf(updCar.id)
 
         val car = carDAO.getById(data)
 
-        if (car == null) return
+        if (car.isNotEmpty()) return
 
         car.first().brand = updCar.brand
         car.first().model = updCar.model
@@ -108,7 +112,7 @@ class CarRepository(
 
         val car = carDAO.getById(id)
 
-        if (car == null) return
+        if (car.isNotEmpty()) return
 
         carDAO.remove(id)
 

@@ -1,4 +1,4 @@
-package br.univesp.tcc.ui.recyclerview
+package br.univesp.tcc.ui
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -63,6 +63,8 @@ class ItemRecycleView(
         notifyItemRangeRemoved(0, this.items.size)
         this.items.clear()
         this.items.addAll(newItems)
+
+
         notifyItemInserted(this.items.size)
     }
 

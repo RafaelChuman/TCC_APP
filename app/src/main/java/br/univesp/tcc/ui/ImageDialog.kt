@@ -1,4 +1,4 @@
-package br.univesp.tcc.ui.dialog
+package br.univesp.tcc.ui
 
 import android.content.Context
 import android.view.LayoutInflater

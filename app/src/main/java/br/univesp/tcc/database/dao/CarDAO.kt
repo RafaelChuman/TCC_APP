@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RewriteQueriesToDropUnusedColumns
 import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.webclient.model.DTOListCarById
 import kotlinx.coroutines.flow.Flow
@@ -12,18 +13,18 @@ import kotlinx.coroutines.flow.Flow
 interface CarDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(car: List<Car>):Long
+    suspend fun save(car: List<Car>)
 
+    @RewriteQueriesToDropUnusedColumns
     @Query(
         """
         SELECT * 
         FROM Car
-        INNER JOIN User ON User.id = Car.userId
         WHERE Car.userId = :userId
         AND Car.deleted = 0
         """
     )
-    fun getByUser(userId: String): Flow<List<Car>>?
+    fun getByUser(userId: String): Flow<List<Car>>
 
     @Query(
         """
@@ -34,7 +35,7 @@ interface CarDAO {
     )
     fun getById(
         id: List<String>,
-    ): List<Car>?
+    ): List<Car>
 
     @Query(
         """
@@ -45,12 +46,12 @@ interface CarDAO {
     )
     fun getByPlate(
         plate: List<String>,
-    ): List<Car>?
+    ): List<Car>
 
     @Query("UPDATE Car set deleted = 1 WHERE id IN (:id) ")
     suspend fun remove(id: List<String>)
 
 
     @Query("""SELECT * FROM Car WHERE Car.deleted = 0 """)
-    fun getAll(): Flow<List<Car>>?
+    fun getAll(): Flow<List<Car>>
 }

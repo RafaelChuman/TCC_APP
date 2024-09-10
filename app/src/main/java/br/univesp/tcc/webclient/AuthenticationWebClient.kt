@@ -1,8 +1,8 @@
 package br.univesp.tcc.webclient
 
 import android.util.Log
-import br.univesp.tcc.database.model.AuthenticatePost
 import br.univesp.tcc.database.model.UserToken
+import br.univesp.tcc.webclient.model.AuthenticateDTO
 import retrofit2.Response
 
 private const val TAG = "AuthenticationWebClient"
@@ -15,7 +15,7 @@ class AuthenticationWebClient {
     {
 
         try {
-            val data =  AuthenticatePost(username, password)
+            val data =  AuthenticateDTO(username, password)
 
             val token = authenticationService.authenticate(data)
             return token

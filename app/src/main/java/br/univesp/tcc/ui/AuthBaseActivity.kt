@@ -1,30 +1,27 @@
-package br.univesp.tcc.ui.activity
+package br.univesp.tcc.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.lifecycleScope
 import br.univesp.tcc.database.DataSource
-import br.univesp.tcc.database.model.User
 import br.univesp.tcc.database.model.UserToken
 import br.univesp.tcc.extensions.RedirectTo
 import br.univesp.tcc.extensions.dataStore
-import br.univesp.tcc.extensions.userIdLogged
 import br.univesp.tcc.repository.AuthenticationRepository
 import br.univesp.tcc.webclient.AuthenticationWebClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+
 
 private const val TAG = "AuthBaseActivity"
 
 abstract class AuthBaseActivity : AppCompatActivity() {
 
     private val userTokenDAO by lazy {
-        DataSource.instance(this).UserTokenDAO()
+        DataSource.getDatabase(this).UserTokenDAO()
     }
 
     private val authenticationWebClient by lazy{
@@ -43,8 +40,8 @@ abstract class AuthBaseActivity : AppCompatActivity() {
 //        DataSource.instance(this).UserDao()
 //    }
 
-    private var _userToken : MutableStateFlow<UserToken?> = MutableStateFlow(null)
-    protected val userToken: StateFlow<UserToken?> = _userToken
+//    private var _userToken : MutableStateFlow<UserToken?> = MutableStateFlow(null)
+//    val userToken: StateFlow<UserToken?> = _userToken
 
 
 
@@ -69,10 +66,10 @@ abstract class AuthBaseActivity : AppCompatActivity() {
             authenticationRepository.logout()
             redirectToLogin()
         }
-        else
-        {
-            _userToken.value = token
-        }
+//        else
+//        {
+//            _userToken.value = token
+//        }
     }
 
 //    private suspend fun getUserById(userId: String): User? {

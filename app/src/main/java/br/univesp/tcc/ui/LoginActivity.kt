@@ -1,4 +1,4 @@
-package br.univesp.tcc.ui.activity
+package br.univesp.tcc.ui
 
 import android.os.Bundle
 import android.view.View
@@ -10,6 +10,7 @@ import br.univesp.tcc.extensions.RedirectTo
 import br.univesp.tcc.extensions.ToastMessage
 import br.univesp.tcc.extensions.dataStore
 import br.univesp.tcc.repository.AuthenticationRepository
+import br.univesp.tcc.ui.activity.NavigationDrawer
 import br.univesp.tcc.webclient.AuthenticationWebClient
 import kotlinx.coroutines.launch
 
@@ -18,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
 
     private val userTokenDAO by lazy {
-        DataSource.instance(this).UserTokenDAO()
+        DataSource.getDatabase(this).UserTokenDAO()
     }
 
     private val authenticationWebClient by lazy{

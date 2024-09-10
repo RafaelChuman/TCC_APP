@@ -4,14 +4,14 @@ import br.univesp.tcc.database.model.User
 
 
 class DTOCreateUser (
-    val name: String?,
-    val userName: String?,
-    val password: String?,
-    val imgPath: String?,
-    val email: String?,
-    val cellphone: String?,
-    val telegram: String?,
-    val isAdmin: Boolean?,
+    val name: String,
+    val userName: String,
+    val password: String,
+    val imgPath: String,
+    val email: String,
+    val cellphone: String,
+    val telegram: String,
+    val isAdmin: Boolean,
 )
 
 class DTOUpdateUser (

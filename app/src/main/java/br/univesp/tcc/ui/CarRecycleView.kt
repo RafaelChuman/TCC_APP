@@ -1,4 +1,4 @@
-package br.univesp.tcc.ui.recyclerview
+package br.univesp.tcc.ui
 
 import android.content.Context
 import android.util.Log
@@ -64,10 +64,9 @@ class CarRecycleView(
         viewType: Int
     ): ViewHolder =
         ViewHolder(
-            RecyclerviewCarBinding
-                .inflate(
-                    LayoutInflater.from(context)
-                ),
+            RecyclerviewCarBinding.inflate(
+                LayoutInflater.from(context)
+            ),
             carOnClickEvent
         )
 

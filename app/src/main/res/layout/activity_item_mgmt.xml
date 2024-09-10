@@ -18,8 +18,7 @@
         app:menu="@menu/mgmt_menu"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:title="@string/group"
-        app:titleTextColor="@color/white"
-        />
+        app:titleTextColor="@color/white" />
 
     <ScrollView
         android:id="@+id/activity_item_mgmt_scrollview"
@@ -92,13 +91,6 @@
                     tools:layout_editor_absoluteX="16dp"
                     tools:layout_editor_absoluteY="29dp" />
             </com.google.android.material.textfield.TextInputLayout>
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

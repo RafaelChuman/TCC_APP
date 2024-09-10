@@ -20,6 +20,11 @@
             android:icon="@drawable/ic_group"
             android:title="@string/group"
             app:showAsAction="withText" />
+        <item
+            android:id="@+id/navigation_menu_user"
+            android:icon="@drawable/ic_group"
+            android:title="@string/client"
+            app:showAsAction="withText" />
     </group>
 
     <item android:title="">

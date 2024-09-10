@@ -1,11 +1,9 @@
 package br.univesp.tcc.database.model
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -33,7 +31,7 @@ class Car() {
     var yearOfModel: Int
     var color: String
     @ColumnInfo(index = true)
-    var createdAt: String
+    var createdAt: LocalDateTime
     @ColumnInfo(index = true)
     var userId: String
     var deleted: Boolean
@@ -49,27 +47,13 @@ class Car() {
         yearOfFabrication = 0;
         yearOfModel = 0;
         color = "";
-        createdAt = "";
+        createdAt = LocalDateTime.now();
         userId = "";
         deleted = false;
         updated = LocalDateTime.now();
     }
 
-    constructor(
-        id: String,
-        brand: String,
-        model: String,
-        kind: String,
-        type: String,
-        plate: String,
-        yearOfFabrication: Int,
-        yearOfModel: Int,
-        color: String,
-        createdAt: String,
-        userId: String,
-        deleted: Boolean,
-        updated: LocalDateTime
-    ) : this() {
+    constructor(id: String, brand: String, model: String, kind: String, type: String, plate: String, yearOfFabrication: Int, yearOfModel: Int, color: String, createdAt: LocalDateTime, userId: String, deleted: Boolean, updated: LocalDateTime) : this() {
         this.id =id
         this.brand = brand
         this.model = model

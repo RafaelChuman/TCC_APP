@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import br.univesp.tcc.database.dao.UserTokenDAO
 import br.univesp.tcc.database.model.UserToken
-import br.univesp.tcc.extensions.dataStore
-import br.univesp.tcc.extensions.userIdLogged
+import br.univesp.tcc.extensions.tokenDataStore
+import br.univesp.tcc.extensions.userIdDataStore
 import br.univesp.tcc.webclient.AuthenticationWebClient
 
 private const val TAG = "AuthenticationRepository"
@@ -34,7 +34,8 @@ class AuthenticationRepository (private val authenticationDAO: UserTokenDAO,
 
                 Log.i(TAG, "authenticateUser - token.userId: ${token.userId}")
                 dataStore.edit { preferences ->
-                    preferences[userIdLogged] = token.userId
+                    preferences[userIdDataStore] = token.userId
+                    preferences[tokenDataStore] = token.token
                 }
 
                 return true
@@ -51,7 +52,7 @@ class AuthenticationRepository (private val authenticationDAO: UserTokenDAO,
         var userId : String = ""
 
         dataStore.data.collect { preferences ->
-            preferences[userIdLogged]?.let { usrId ->
+            preferences[userIdDataStore]?.let { usrId ->
                 userId = usrId
             }
         }
@@ -89,7 +90,8 @@ class AuthenticationRepository (private val authenticationDAO: UserTokenDAO,
         Log.i(TAG, "logout - delToken: $token")
 
         dataStore.edit { preferences ->
-            preferences[userIdLogged] = ""
+            preferences[userIdDataStore] = ""
+            preferences[tokenDataStore] = ""
             Log.i(TAG, "logout - preferences.remove")
         }
 

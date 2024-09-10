@@ -1,4 +1,4 @@
-package br.univesp.tcc.ui.activity
+package br.univesp.tcc.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +12,8 @@ import br.univesp.tcc.R
 import br.univesp.tcc.database.DataSource
 import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.databinding.ActivityCarMgmtBinding
+import br.univesp.tcc.ui.activity.CAR_ID
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -20,14 +22,14 @@ private const val TAG = "CarMgmtActivity"
 
 class CarMgmtActivity : AuthBaseActivity() {
 
-    private var carID: String? = null
+    private var carID: String = ""
 
     private val carDAO by lazy {
-        DataSource.instance(this).CarDAO()
+        DataSource.getDatabase(this).CarDAO()
     }
 
     private val userDao by lazy {
-        DataSource.instance(this).UserDao()
+        DataSource.getDatabase(this).UserDao()
     }
 
     private var selectedIdOnSpinner = ""
@@ -41,13 +43,11 @@ class CarMgmtActivity : AuthBaseActivity() {
 
         setSupportActionBar(binding.activityCarMgmtToolbar)
 
-        setContentView(
-            binding.root
-        )
+        setContentView(binding.root)
 
         getIotID()
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             launch {
                 getIotFromDataSource()
             }
@@ -55,7 +55,6 @@ class CarMgmtActivity : AuthBaseActivity() {
                 setGroupOnSpinner()
             }
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -78,18 +77,16 @@ class CarMgmtActivity : AuthBaseActivity() {
 
 
     private fun getIotID() {
-        carID = intent.getStringExtra(CAR_ID)
+        carID = intent.getStringExtra(CAR_ID).toString()
     }
 
 
     private suspend fun getIotFromDataSource() {
-        carID?.let { id ->
-            carDAO.getById(id)
-                ?.filterNotNull()
-                ?.collect { car ->
-                    carID = car.id
-                    binding.activityCarEditTextName.setText(car.model)
-                }
+        carID.let { id ->
+            carDAO.getById(listOf(id)).map { car ->
+                carID = car.id
+                binding.activityCarEditTextName.setText(car.model)
+            }
         }
     }
 
@@ -97,9 +94,10 @@ class CarMgmtActivity : AuthBaseActivity() {
 
         val spinner = binding.activityCarMgmtSpinnerGroup
 
-        userDao.getAll()?.filterNotNull()?.collect { group ->
+        userDao.getAll().filterNotNull().collect { group ->
 
-            val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, group.map { it.name })
+            val spinnerAdapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_item, group.map { it.name })
 
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = spinnerAdapter
@@ -126,9 +124,12 @@ class CarMgmtActivity : AuthBaseActivity() {
 
     private fun remove() {
         lifecycleScope.launch {
-            carID?.let { id ->
-                carDAO.remove(id)
+            if(carID.isNotEmpty()) {
+                carDAO.remove(listOf(carID))
+
+
             }
+
             finish()
         }
     }
@@ -140,7 +141,7 @@ class CarMgmtActivity : AuthBaseActivity() {
         lifecycleScope.launch {
 
             Log.i(TAG, "save: $car")
-            carDAO.save(car)
+            carDAO.save(listOf(car))
 
             finish()
         }
@@ -150,36 +151,26 @@ class CarMgmtActivity : AuthBaseActivity() {
     private fun createNewCar(): Car {
         val brand = binding.activityCarEditTextName.text.toString()
 
-        return carID?.let { id ->
-            Car(
-                id = id,
-                yearOfFabrication = 2007,
-                kind = "Passeio",
-                brand = brand,
-                updated = "",
-                deleted = false,
-                type = "automóvel",
-                model = "Astra Sedan",
-                plate = "FFB6162",
-                yearOfModel = 2007,
-                color = "Prata",
-                userId = selectedIdOnSpinner,
-                createdAt = LocalDateTime.now().toString()
-            )
-        } ?:
-            Car(
-                yearOfFabrication = 2007,
-                kind = "Passeio",
-                brand = brand,
-                updated = "",
-                deleted = false,
-                type = "automóvel",
-                model = "Astra Sedan",
-                plate = "FFB6162",
-                yearOfModel = 2007,
-                color = "Prata",
-                userId = selectedIdOnSpinner,
-                createdAt = LocalDateTime.now().toString()
-            )
+        val newCar = Car()
+
+        newCar.yearOfFabrication = 2007
+        newCar.kind = "Passeio"
+        newCar.brand = brand
+        newCar.updated = LocalDateTime.now()
+        newCar.deleted = false
+        newCar.type = "automóvel"
+        newCar.model = "Astra Sedan"
+        newCar.plate = "FFB6162"
+        newCar.yearOfModel = 2007
+        newCar.color = "Prata"
+        newCar.userId = selectedIdOnSpinner
+        newCar.createdAt = LocalDateTime.now()
+
+        if (carID.isNotEmpty()) {
+            newCar.createdAt = LocalDateTime.now()
+            newCar.id = carID
+        }
+
+        return newCar
     }
 }
