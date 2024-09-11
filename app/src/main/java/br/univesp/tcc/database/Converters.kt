@@ -43,6 +43,9 @@ class LocalDateTimeAdapter {
         return OffsetDateTime.parse(value, formatter).toLocalDateTime()  // Parse with UTC offset
     }
 }
+
+
+
 class LocalDateTimeConverter {
 
     private val moshi: Moshi = Moshi.Builder()

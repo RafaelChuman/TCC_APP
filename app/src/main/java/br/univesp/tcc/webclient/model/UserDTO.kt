@@ -15,7 +15,7 @@ class DTOCreateUser (
 )
 
 class DTOUpdateUser (
-    val id: String?,
+    val id: String,
     val name: String?,
     val userName: String?,
     val password: String?,

@@ -19,7 +19,6 @@ class User() {
     var cellphone: String
     var telegram: String
     var isAdmin: Boolean
-
     @ColumnInfo(index = true)
     var createdAt: LocalDateTime
     var deleted: Boolean
@@ -40,6 +39,7 @@ class User() {
     }
 
     constructor(
+        id: String,
         name: String,
         userName: String,
         password: String,
@@ -64,5 +64,35 @@ class User() {
         this.createdAt = createdAt
         this.deleted = deleted
         this.updated = updated
+    }
+
+    constructor(
+        name: String,
+        userName: String,
+        password: String,
+        imgPath: String,
+        email: String,
+        cellphone: String,
+        telegram: String,
+        isAdmin: Boolean,
+        createdAt: LocalDateTime,
+        deleted: Boolean,
+        updated: LocalDateTime,
+    ) : this() {
+        this.name = name
+        this.userName = userName
+        this.password = password
+        this.imgPath = imgPath
+        this.email = email
+        this.cellphone = cellphone
+        this.telegram = telegram
+        this.isAdmin = isAdmin
+        this.createdAt = createdAt
+        this.deleted = deleted
+        this.updated = updated
+    }
+
+    override fun toString(): String {
+        return ("$id - $name")
     }
 }

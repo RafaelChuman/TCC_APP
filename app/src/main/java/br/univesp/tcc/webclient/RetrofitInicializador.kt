@@ -2,6 +2,8 @@ package br.univesp.tcc.webclient
 
 import br.univesp.tcc.database.LocalDateTimeAdapter
 import br.univesp.tcc.database.LocalDateTimeConverter
+import br.univesp.tcc.database.model.DeleteResult
+import br.univesp.tcc.database.model.InsertResult
 import br.univesp.tcc.webclient.services.AuthenticationService
 import br.univesp.tcc.webclient.services.CarService
 import br.univesp.tcc.webclient.services.ItemService
@@ -15,11 +17,15 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 class RetrofitInicializador {
 
+
+
     private val moshi: Moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .add(LocalDateTimeAdapter())  // Adapter para LocalDateTime
         .build()
 
+    val adapterDeleteResult = moshi.adapter(DeleteResult::class.java)
+    val adapterInsertResult = moshi.adapter(InsertResult::class.java)
 
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("http://192.168.15.56:3333/")

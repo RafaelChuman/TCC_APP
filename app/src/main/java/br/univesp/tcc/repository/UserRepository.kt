@@ -1,15 +1,10 @@
 package br.univesp.tcc.repository
 
 import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import br.univesp.tcc.database.dao.UserDao
-import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.database.model.User
 import br.univesp.tcc.extensions.tokenDataStore
-import br.univesp.tcc.extensions.userIdDataStore
 import br.univesp.tcc.webclient.UserWebClient
-import br.univesp.tcc.webclient.model.DTOCreateCar
 import br.univesp.tcc.webclient.model.DTOCreateUser
 import br.univesp.tcc.webclient.model.DTODeleteUser
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +13,7 @@ import kotlinx.coroutines.flow.single
 import java.time.LocalDateTime
 import android.content.Context
 import br.univesp.tcc.extensions.dataStore
+import br.univesp.tcc.webclient.model.DTOUpdateUser
 
 private const val TAG = "UserRepository"
 
@@ -40,12 +36,11 @@ class UserRepository(
 
         Log.i(TAG, "syncUsers")
 
-        val preferences = ctx.dataStore.data.firstOrNull()
-        val userToken = preferences?.get(tokenDataStore) ?: return
+        val userToken = getToken()
 
         val userWeb = userWebClient.list(userToken)
 
-        val users = userDao.getAll().firstOrNull() ?: return
+        val users = userDao.getAll().firstOrNull() ?: listOf<User>()
 
         if(userWeb == null) return
 
@@ -53,7 +48,7 @@ class UserRepository(
         for(user in  userWeb)
         {
             val updUser = users.find { usr -> usr.id == user.id }
-            if(updUser == null || updUser.updated > user.updated )
+            if(updUser == null || updUser.updated < user.updated )
             {
                 updList.add(user)
             }
@@ -69,7 +64,7 @@ class UserRepository(
         return userDao.getById(listOf(id))
     }
 
-    suspend fun updateUser(userToken: String) {
+    suspend fun reloadAllUser(userToken: String) {
         Log.i(TAG, "updateUser")
 
         userWebClient.list(userToken)?.let { users ->
@@ -77,44 +72,47 @@ class UserRepository(
         }
     }
 
-    suspend fun insert(newUser: DTOCreateUser) {
+    suspend fun insert(newUser: User) {
 
         Log.i(TAG, "insert - newUser: $newUser")
+        val userToken = getToken()
 
-        val createdAt = LocalDateTime.now()
+        val userSearched = userDao.getByUserName(newUser.userName).firstOrNull()
 
-        val userSearched = userDao.getByUserName(newUser.userName).single()
+        if (!userSearched.isNullOrEmpty()) return
 
-        if (userSearched.isEmpty()) return
+        userDao.save(listOf(newUser))
 
-        val user = User(
-            userName = newUser.userName,
-            name = newUser.name,
-            password = newUser.password,
-            imgPath = newUser.imgPath,
-            email = newUser.email,
-            cellphone = newUser.cellphone,
-            telegram = newUser.telegram,
-            isAdmin = newUser.isAdmin,
-            createdAt = createdAt,
-            deleted = false,
-            updated = createdAt
-        )
-
-        userDao.save(listOf(user))
-
-        val userInserted = userWebClient.create(user)
+        val userInserted = userWebClient.create(userToken, newUser)
 
         Log.i(TAG, "insert - userInserted: $userInserted")
+    }
+
+    suspend fun update(updateUser: User) {
+
+        Log.i(TAG, "update - updateUser: $updateUser")
+        val userToken = getToken()
+
+        val userSearched = userDao.getById(listOf(updateUser.id) ).firstOrNull()
+
+        if (userSearched.isNullOrEmpty()) return
+
+        userDao.save(listOf(updateUser))
+
+        val userUpdated = userWebClient.update(userToken, updateUser)
+
+        Log.i(TAG, "update - userUpdated: $userUpdated")
     }
 
     suspend fun delete(idList: List<String>) {
 
         if (idList.isNotEmpty()) {
 
-            val user = userDao.getById(idList).single()
+            val userToken = getToken()
 
-            if (user.isEmpty()) return
+            val user = userDao.getById(idList).firstOrNull()
+
+            if (user.isNullOrEmpty()) return
 
             val data = DTODeleteUser(
                 id = user.map { usr -> usr.id }
@@ -122,7 +120,19 @@ class UserRepository(
 
             userDao.dellById(data.id)
 
-            userWebClient.delete(data)
+            userWebClient.delete(userToken, data)
         }
+    }
+
+    private suspend fun getToken(): String{
+        val preferences = ctx.dataStore.data.firstOrNull()
+
+        if(preferences == null) return ""
+
+        val userToken = preferences[tokenDataStore]
+
+        if(userToken.isNullOrEmpty()) return ""
+
+        return userToken
     }
 }
