@@ -13,10 +13,10 @@ private const val TAG = "CarRecycleView"
 class CarRecycleView(
     private val context: Context,
     var carOnClickEvent: (car: Car) -> Unit = {},
-    car: List<Car> = emptyList()
+    carList: List<Car> = emptyList()
 ) : RecyclerView.Adapter<CarRecycleView.ViewHolder>() {
 
-    private val cars = car.toMutableList()
+    private val cars = carList.toMutableList()
 
     inner class ViewHolder(
         private val binding: RecyclerviewCarBinding,
@@ -38,14 +38,15 @@ class CarRecycleView(
 
             this.car = item
 
-            val brand = binding.recyclerviewCarTextViewName
-            val model = binding.recyclerviewCarTextViewName
-            val kind = binding.recyclerviewCarTextViewName
-            val type = binding.recyclerviewCarTextViewName
-            val plate = binding.recyclerviewCarTextViewName
-            val color = binding.recyclerviewCarTextViewName
-            val yearOfFabrication = binding.recyclerviewCarTextViewName
-            val yearOfModel = binding.recyclerviewCarTextViewName
+            val brand = binding.textViewBrand
+            val model = binding.textViewModel
+            val kind = binding.textViewKind
+            val type = binding.textViewFuel
+            val plate = binding.textViewPlate
+            val color = binding.textViewColor
+            val yearOfFabrication = binding.textViewYearOfFabrication
+            val yearOfModel = binding.textViewYearOfModel
+            val userName = binding.textViewUserName
 
             brand.text = item.brand
             model.text = item.model
@@ -55,6 +56,7 @@ class CarRecycleView(
             color.text = item.color
             yearOfFabrication.text = item.yearOfFabrication.toString()
             yearOfModel.text = item.yearOfModel.toString()
+            userName.text = item.userId
 
         }
     }
@@ -69,7 +71,6 @@ class CarRecycleView(
             ),
             carOnClickEvent
         )
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.associateItem(cars[position])

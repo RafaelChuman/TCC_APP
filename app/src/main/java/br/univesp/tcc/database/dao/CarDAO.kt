@@ -15,27 +15,14 @@ interface CarDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun save(car: List<Car>)
 
-    @RewriteQueriesToDropUnusedColumns
-    @Query(
-        """
-        SELECT * 
-        FROM Car
-        WHERE Car.userId = :userId
-        AND Car.deleted = 0
-        """
-    )
-    fun getByUser(userId: String): Flow<List<Car>>
+    @Query("UPDATE Car set deleted = 1 WHERE id IN (:id) ")
+    suspend fun remove(id: List<String>)
 
-    @Query(
-        """
-        SELECT * 
-        FROM Car
-        WHERE id IN (:id)
-        AND Car.deleted = 0"""
-    )
-    fun getById(
-        id: List<String>,
-    ): List<Car>
+    @Query("DELETE FROM Car WHERE id IN (:id) ")
+    suspend fun purge(id: List<String>)
+
+    @Query("""SELECT * FROM Car  """) // WHERE Car.deleted = 0 """)
+    fun getAll(): Flow<List<Car>>
 
     @Query(
         """
@@ -46,12 +33,27 @@ interface CarDAO {
     )
     fun getByPlate(
         plate: List<String>,
-    ): List<Car>
+    ): Flow<List<Car>>
 
-    @Query("UPDATE Car set deleted = 1 WHERE id IN (:id) ")
-    suspend fun remove(id: List<String>)
+    @Query(
+        """
+        SELECT * 
+        FROM Car
+        WHERE id IN (:id)
+        AND Car.deleted = 0"""
+    )
+    fun getById(
+        id: List<String>,
+    ): Flow<List<Car>>
 
-
-    @Query("""SELECT * FROM Car WHERE Car.deleted = 0 """)
-    fun getAll(): Flow<List<Car>>
+    @RewriteQueriesToDropUnusedColumns
+    @Query(
+        """
+        SELECT * 
+        FROM Car
+        WHERE Car.userId = :userId
+        AND Car.deleted = 0
+        """
+    )
+    fun getByUser(userId: String): Flow<List<Car>>
 }

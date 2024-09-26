@@ -23,7 +23,21 @@ class UserRepository(
     private val ctx: Context
 ) {
 
+    private suspend fun getToken(): String {
+        val preferences = ctx.dataStore.data.firstOrNull()
+
+        if (preferences == null) return ""
+
+        val userToken = preferences[tokenDataStore]
+
+        if (userToken.isNullOrEmpty()) return ""
+
+        return userToken
+    }
+
     suspend fun getUsers(): List<User>? {
+
+        syncUsers()
 
         val user = userDao.getAll().firstOrNull()
 
@@ -32,33 +46,32 @@ class UserRepository(
         return user
     }
 
-    suspend fun  syncUsers() {
+    private suspend fun syncUsers() {
 
         Log.i(TAG, "syncUsers")
 
         val userToken = getToken()
 
         val userWeb = userWebClient.list(userToken)
-
         val users = userDao.getAll().firstOrNull() ?: listOf<User>()
+        val updList: MutableList<User> = mutableListOf<User>()
 
-        if(userWeb == null) return
+        if (users.isEmpty()) return
+        if (userWeb == null) return
 
-        val updList : MutableList<User> = mutableListOf<User>()
-        for(user in  userWeb)
-        {
+
+        for (user in userWeb) {
             val updUser = users.find { usr -> usr.id == user.id }
-            if(updUser == null || updUser.updated < user.updated )
-            {
+            if (updUser == null || updUser.updated < user.updated) {
                 updList.add(user)
             }
         }
 
         Log.i(TAG, "syncUsers - users: $updList")
-        if(updList.isNotEmpty()) userDao.save(updList)
+        if (updList.isNotEmpty()) userDao.save(updList)
     }
 
-    fun getById(id : String): Flow<List<User>> {
+    fun getById(id: String): Flow<List<User>> {
         Log.i(TAG, "getById - id: $id")
 
         return userDao.getById(listOf(id))
@@ -93,7 +106,7 @@ class UserRepository(
         Log.i(TAG, "update - updateUser: $updateUser")
         val userToken = getToken()
 
-        val userSearched = userDao.getById(listOf(updateUser.id) ).firstOrNull()
+        val userSearched = userDao.getById(listOf(updateUser.id)).firstOrNull()
 
         if (userSearched.isNullOrEmpty()) return
 
@@ -106,33 +119,22 @@ class UserRepository(
 
     suspend fun delete(idList: List<String>) {
 
-        if (idList.isNotEmpty()) {
+        if (idList.isNotEmpty()) return
 
-            val userToken = getToken()
+        val userToken = getToken()
 
-            val user = userDao.getById(idList).firstOrNull()
+        val user = userDao.getById(idList).firstOrNull()
 
-            if (user.isNullOrEmpty()) return
+        if (user.isNullOrEmpty()) return
 
-            val data = DTODeleteUser(
-                id = user.map { usr -> usr.id }
-            )
+        val data = DTODeleteUser(
+            id = idList
+        )
 
-            userDao.dellById(data.id)
+        userDao.dellById(data.id)
 
-            userWebClient.delete(userToken, data)
-        }
-    }
+        val userDeleted = userWebClient.delete(userToken, data)
+        Log.i(TAG, "update - userDeleted: $userDeleted")
 
-    private suspend fun getToken(): String{
-        val preferences = ctx.dataStore.data.firstOrNull()
-
-        if(preferences == null) return ""
-
-        val userToken = preferences[tokenDataStore]
-
-        if(userToken.isNullOrEmpty()) return ""
-
-        return userToken
     }
 }

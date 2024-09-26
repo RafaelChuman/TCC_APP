@@ -28,7 +28,7 @@ class RetrofitInicializador {
     val adapterInsertResult = moshi.adapter(InsertResult::class.java)
 
     private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.15.56:3333/")
+        .baseUrl("http://192.168.15.3:3333/")
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 

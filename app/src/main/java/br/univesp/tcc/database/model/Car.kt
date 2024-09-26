@@ -32,10 +32,11 @@ class Car() {
     var color: String
     @ColumnInfo(index = true)
     var createdAt: LocalDateTime
-    @ColumnInfo(index = true)
-    var userId: String
     var deleted: Boolean
     var updated: LocalDateTime
+
+    @ColumnInfo(index = true)
+    var userId: String
 
     init {
         id = UUID.randomUUID().toString();
@@ -48,9 +49,10 @@ class Car() {
         yearOfModel = 0;
         color = "";
         createdAt = LocalDateTime.now();
-        userId = "";
         deleted = false;
         updated = LocalDateTime.now();
+
+        userId = "";
     }
 
     constructor(id: String, brand: String, model: String, kind: String, type: String, plate: String, yearOfFabrication: Int, yearOfModel: Int, color: String, createdAt: LocalDateTime, userId: String, deleted: Boolean, updated: LocalDateTime) : this() {
@@ -64,9 +66,14 @@ class Car() {
         this.yearOfModel =yearOfModel
         this.color = color
         this.createdAt = createdAt
-        this.userId = userId
         this.deleted = deleted
         this.updated = updated
+
+        this.userId = userId
+    }
+
+    override fun toString(): String {
+        return ("$id - $model, $color, $plate, $userId")
     }
 }
 

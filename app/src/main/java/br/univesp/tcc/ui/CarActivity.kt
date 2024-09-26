@@ -7,9 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import br.univesp.tcc.database.DataSource
 import br.univesp.tcc.databinding.ActivityCarBinding
+import br.univesp.tcc.repository.CarRepository
+import br.univesp.tcc.repository.UserRepository
 import br.univesp.tcc.ui.activity.CAR_ID
+import br.univesp.tcc.webclient.CarWebClient
+import br.univesp.tcc.webclient.UserWebClient
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 
 private const val TAG = "CarActivity"
 
@@ -17,7 +26,7 @@ class CarActivity : Fragment() {
 
     private lateinit var binding: ActivityCarBinding
 
-    private val adapter by lazy {
+    private val recycleViewAdapter by lazy {
         CarRecycleView(requireContext())
     }
 
@@ -25,48 +34,65 @@ class CarActivity : Fragment() {
         DataSource.getDatabase(requireContext()).CarDAO()
     }
 
+    private val carWebClient by lazy {
+        CarWebClient()
+    }
+
+    private val ctx by lazy {
+        requireContext()
+    }
+
+    private val carRepository by lazy {
+
+        CarRepository(
+            carDao,
+            carWebClient,
+            ctx
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = ActivityCarBinding.inflate(inflater, container, false)
 
+        configRecyclerView()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                getAllCar()
+            }
+        }
        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        super.onCreate(savedInstanceState)
 
-        binding.activityCarFloatingButton.setOnClickListener {
+        binding.floatingButton.setOnClickListener {
             setFab()
         }
     }
 
-    private suspend fun getAllCarOfUser(userId: String) {
-        carDao.getByUser(userId).collect { item ->
+    private suspend fun getAllCar() {
+        val car = carRepository.getAll()
 
-            Log.i(TAG, "getAllCarOfUser: $item")
+        Log.i(TAG, "getAllCarOfUser: $car")
 
-            binding.activityCarTextView.visibility =
-                if (item.isEmpty()) {
-                    binding.activityCarRecyclerView.visibility = View.GONE
-                    View.VISIBLE
-                } else {
-                    binding.activityCarRecyclerView.visibility = View.VISIBLE
-                    adapter.update(item)
-                    View.GONE
-                }
+        if(car.isNullOrEmpty()) {
+            binding.textView.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+
+            Log.i(TAG, "getAllUser - user: user.isNullOrEmpty()")
         }
-    }
+        else{
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.textView.visibility =  View.GONE
 
-    private fun configRecyclerView() {
-        binding.activityCarRecyclerView.adapter = adapter
-        adapter.carOnClickEvent = { car ->
-            val intent = Intent(requireActivity(), CarMgmtActivity::class.java)
-            intent.putExtra(CAR_ID, car.id)
-            startActivity(intent)
+            Log.i(TAG, "getAllUser - user: ${car.toString()}")
+            recycleViewAdapter.update(car)
         }
     }
 
@@ -75,4 +101,13 @@ class CarActivity : Fragment() {
         startActivity(intent)
     }
 
+    private fun configRecyclerView() {
+        binding.recyclerView.adapter = recycleViewAdapter
+        recycleViewAdapter.carOnClickEvent = { car ->
+            val intent = Intent(requireActivity(), CarMgmtActivity::class.java)
+
+            intent.putExtra(CAR_ID, car.id)
+            startActivity(intent)
+        }
+    }
 }

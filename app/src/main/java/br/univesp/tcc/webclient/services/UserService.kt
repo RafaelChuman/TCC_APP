@@ -21,11 +21,11 @@ interface UserService {
     @POST("user")
     suspend fun create(@Header("Authorization") token: String, @Body data: User): Response<InsertResult>
 
-    @HTTP(method = "DELETE", path = "user", hasBody = true)
-    suspend fun delete(@Header("Authorization") token: String, @Body data: DTODeleteUser): Response<DeleteResult>
-
     @PUT("user")
     suspend fun update(@Header("Authorization") token: String, @Body user: User): Response<User>
+
+    @HTTP(method = "DELETE", path = "user", hasBody = true)
+    suspend fun delete(@Header("Authorization") token: String, @Body data: DTODeleteUser): Response<DeleteResult>
 
     @GET("user")
     suspend fun list(@Header("Authorization") token: String): Response< List<User>>

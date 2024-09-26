@@ -29,20 +29,6 @@ class UserWebClient {
         return null
     }
 
-    suspend fun delete(userToken: String, data: DTODeleteUser): Response<DeleteResult>?
-    {
-        try {
-            val listResp = userService.delete(userToken, data)
-
-            Log.i(TAG, "delete - listResp: $listResp")
-            return listResp
-
-        } catch (e: Exception) {
-            Log.e(TAG, "delete - Error: ", e)
-        }
-        return null
-    }
-
     suspend fun update(userToken: String, data: User): User?
     {
         try {
@@ -57,6 +43,19 @@ class UserWebClient {
         return null
     }
 
+    suspend fun delete(userToken: String, data: DTODeleteUser): Response<DeleteResult>?
+    {
+        try {
+            val listResp = userService.delete(userToken, data)
+
+            Log.i(TAG, "delete - listResp: $listResp")
+            return listResp
+
+        } catch (e: Exception) {
+            Log.e(TAG, "delete - Error: ", e)
+        }
+        return null
+    }
 
     suspend fun list(userToken: String): List<User>?
     {

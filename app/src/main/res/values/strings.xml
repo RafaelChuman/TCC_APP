@@ -53,6 +53,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="newUser">Novo Cliente</string>
+    <string name="brand">Marca</string>
+    <string name="kind">Tipo</string>
+    <string name="model">Modelo</string>
+    <string name="fuel">Combustível</string>
+    <string name="plate">Placa</string>
+    <string name="yearOfFabrication">Ano de Fabricação</string>
+    <string name="yearOfModel">Ano do Modelo</string>
+    <string name="color">Cor</string>
+    <string name="car">Carro</string>
+    <string name="newCar">Novo Carro</string>
 
 
 </resources>

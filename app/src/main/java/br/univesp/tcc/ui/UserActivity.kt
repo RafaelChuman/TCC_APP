@@ -57,10 +57,6 @@ class UserActivity : Fragment() {
 
         configRecyclerView()
 
-        lifecycleScope.launch {
-            userRepository.syncUsers()
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 getAllUser()

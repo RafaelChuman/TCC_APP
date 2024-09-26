@@ -12,7 +12,11 @@ import br.univesp.tcc.R
 import br.univesp.tcc.database.DataSource
 import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.databinding.ActivityCarMgmtBinding
+import br.univesp.tcc.repository.CarRepository
+import br.univesp.tcc.repository.UserRepository
 import br.univesp.tcc.ui.activity.CAR_ID
+import br.univesp.tcc.webclient.CarWebClient
+import br.univesp.tcc.webclient.UserWebClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -22,34 +26,42 @@ private const val TAG = "CarMgmtActivity"
 
 class CarMgmtActivity : AuthBaseActivity() {
 
-    private var carID: String = ""
-
-    private val carDAO by lazy {
-        DataSource.getDatabase(this).CarDAO()
-    }
-
-    private val userDao by lazy {
-        DataSource.getDatabase(this).UserDao()
-    }
-
     private var selectedIdOnSpinner = ""
+    private var carID: String = ""
+    private var carSearched = Car()
 
     private val binding by lazy {
         ActivityCarMgmtBinding.inflate(layoutInflater)
     }
+    private val carDAO by lazy {
+        DataSource.getDatabase(this).CarDAO()
+    }
+    private val carWebClient by lazy {
+        CarWebClient()
+    }
+    private val userDao by lazy {
+        DataSource.getDatabase(this).UserDao()
+    }
+    private val carRepository by lazy {
+        CarRepository(
+            carDAO,
+            carWebClient,
+            this.baseContext
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(TAG, "onCreate - savedInstanceState: $savedInstanceState")
+
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(binding.activityCarMgmtToolbar)
+        setSupportActionBar(binding.toolbar)
 
         setContentView(binding.root)
 
-        getIotID()
-
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch() {
             launch {
-                getIotFromDataSource()
+                getCarID()
             }
             launch {
                 setGroupOnSpinner()
@@ -58,12 +70,16 @@ class CarMgmtActivity : AuthBaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        Log.i(TAG, "onCreateOptionsMenu - menu: $menu")
+
         menuInflater.inflate(R.menu.mgmt_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+    override fun onOptionsItemSelected(menu: MenuItem): Boolean {
+        Log.i(TAG, "onOptionsItemSelected - menu: $menu")
+
+        when (menu.itemId) {
             R.id.mgmt_menu_save -> {
                 save()
             }
@@ -72,27 +88,36 @@ class CarMgmtActivity : AuthBaseActivity() {
                 remove()
             }
         }
-        return super.onOptionsItemSelected(item)
+        return super.onOptionsItemSelected(menu)
     }
 
 
-    private fun getIotID() {
-        carID = intent.getStringExtra(CAR_ID).toString()
-    }
+    private suspend fun getCarID() {
+        carID = intent.getStringExtra(CAR_ID) ?: ""
+        Log.i(TAG, "getCarID - carID: $carID")
 
+        if (carID.isEmpty()) return
 
-    private suspend fun getIotFromDataSource() {
-        carID.let { id ->
-            carDAO.getById(listOf(id)).map { car ->
-                carID = car.id
-                binding.activityCarEditTextName.setText(car.model)
-            }
-        }
+        val carList = carRepository.getCarById(carID)
+
+        if (carList.isNullOrEmpty()) return
+
+        carSearched = carList.first()
+
+        binding.textInputEditTextBrand.setText(carSearched.brand.toString())
+        binding.textInputEditTextModel.setText(carSearched.model.toString())
+        binding.textInputEditTextKind.setText(carSearched.kind.toString())
+        binding.textInputEditTextFuel.setText(carSearched.type.toString())
+        binding.textInputEditTextPlate.setText(carSearched.plate.toString())
+        binding.textInputEditTextYearOfFabrication.setText(carSearched.yearOfFabrication.toString())
+        binding.textInputEditTextYearOfModel.setText(carSearched.yearOfModel.toString())
+        binding.textInputEditTextColor.setText(carSearched.color.toString())
+
     }
 
     private suspend fun setGroupOnSpinner() {
 
-        val spinner = binding.activityCarMgmtSpinnerGroup
+        val spinner = binding.spinnerGroup
 
         userDao.getAll().filterNotNull().collect { group ->
 
@@ -123,11 +148,12 @@ class CarMgmtActivity : AuthBaseActivity() {
 
 
     private fun remove() {
+        Log.i(TAG, "remove - carID: $carID")
+
         lifecycleScope.launch {
-            if(carID.isNotEmpty()) {
-                carDAO.remove(listOf(carID))
 
-
+            if (carID.isNotEmpty()) {
+                carRepository.delete(listOf(carID))
             }
 
             finish()
@@ -136,39 +162,56 @@ class CarMgmtActivity : AuthBaseActivity() {
 
     private fun save() {
 
-        val car = createNewCar()
+        Log.i(TAG, "save - carID: $carID")
 
-        lifecycleScope.launch {
+        val carCreated = createNewCar()
 
-            Log.i(TAG, "save: $car")
-            carDAO.save(listOf(car))
-
-            finish()
+        if (carID.isEmpty()) {
+            lifecycleScope.launch {
+                carRepository.insert(carCreated)
+                Log.i(TAG, "save - carCreated: $carCreated")
+            }
+        } else {
+            lifecycleScope.launch {
+                carRepository.update(carCreated)
+                Log.i(TAG, "save - carCreated: $carCreated")
+            }
         }
+        finish()
     }
 
-
     private fun createNewCar(): Car {
-        val brand = binding.activityCarEditTextName.text.toString()
+
+        Log.i(TAG, "createNewCar")
+
+        val updateAt = LocalDateTime.now()
+
+        val brand = binding.textInputEditTextBrand.text.toString()
+        val kind = binding.textInputEditTextKind.text.toString()
+        val type = binding.textInputEditTextFuel.text.toString()
+        val model = binding.textInputEditTextModel.text.toString()
+        val plate = binding.textInputEditTextPlate.text.toString()
+        val yearOfFabrication = binding.textInputEditTextYearOfFabrication.text.toString()
+        val yearOfModel = binding.textInputEditTextYearOfModel.text.toString()
+        val color = binding.textInputEditTextColor.text.toString()
 
         val newCar = Car()
 
-        newCar.yearOfFabrication = 2007
-        newCar.kind = "Passeio"
         newCar.brand = brand
-        newCar.updated = LocalDateTime.now()
+        newCar.kind = kind
         newCar.deleted = false
-        newCar.type = "automóvel"
-        newCar.model = "Astra Sedan"
-        newCar.plate = "FFB6162"
-        newCar.yearOfModel = 2007
-        newCar.color = "Prata"
+        newCar.type = type
+        newCar.model = model
+        newCar.plate = plate
+        newCar.yearOfFabrication = yearOfFabrication.toInt()
+        newCar.yearOfModel = yearOfModel.toInt()
+        newCar.color = color
         newCar.userId = selectedIdOnSpinner
-        newCar.createdAt = LocalDateTime.now()
+        newCar.updated = updateAt
 
         if (carID.isNotEmpty()) {
-            newCar.createdAt = LocalDateTime.now()
-            newCar.id = carID
+            newCar.id = carSearched.id
+            newCar.createdAt = carSearched.createdAt
         }
 
         return newCar

@@ -27,22 +27,18 @@ private const val TAG = "UserMgmtActivity"
 
 class UserMgmtActivity : AuthBaseActivity() {
 
+    private var userId: String = ""
+    private var userSearched = User()
+
     private val binding by lazy {
         ActivityUserMgmtBinding.inflate(layoutInflater)
     }
-
-    private var userId: String = ""
-
-    private var userSearched = User()
-
     private val userDao by lazy {
         DataSource.getDatabase(this).UserDao()
     }
-
     private val userWebClient by lazy {
         UserWebClient()
     }
-
     private val userRepository by lazy {
         UserRepository(
             userDao,
@@ -95,29 +91,28 @@ class UserMgmtActivity : AuthBaseActivity() {
         userId = intent.getStringExtra(USER_ID) ?: ""
         Log.i(TAG, "getUser - userId: $userId")
 
-        if (userId.isEmpty() == false) {
+        if (userId.isEmpty()) return
 
-            val userList = userRepository.getById(userId).firstOrNull()
-            Log.i(TAG, "getUser - userList: $userList")
+        val userList = userRepository.getById(userId).firstOrNull()
+        Log.i(TAG, "getUser - userList: $userList")
 
-            if (!userList.isNullOrEmpty()) {
-                userSearched = userList.first()
+        if (userList.isNullOrEmpty()) return
 
-                binding.textInputEditTextName.setText(userSearched.name.toString())
-                binding.textInputEditTextUserName.setText(userSearched.userName.toString())
-                binding.textInputEditTextImgPath.setText(userSearched.imgPath.toString())
-                binding.textInputEditTextEmail.setText(userSearched.email.toString())
-                binding.textInputEditTextCellphone.setText(userSearched.cellphone.toString())
-                binding.textInputEditTextTelegram.setText(userSearched.telegram.toString())
-            }
-        }
+        userSearched = userList.first()
+
+        binding.textInputEditTextName.setText(userSearched.name.toString())
+        binding.textInputEditTextUserName.setText(userSearched.userName.toString())
+        binding.textInputEditTextImgPath.setText(userSearched.imgPath.toString())
+        binding.textInputEditTextEmail.setText(userSearched.email.toString())
+        binding.textInputEditTextCellphone.setText(userSearched.cellphone.toString())
+        binding.textInputEditTextTelegram.setText(userSearched.telegram.toString())
     }
 
     private fun remove() {
         Log.i(TAG, "remove - userId: $userId")
         lifecycleScope.launch {
 
-            if (userId.isEmpty() == false) {
+            if (userId.isNotEmpty()) {
                 userRepository.delete(listOf(userId))
             }
 
@@ -127,18 +122,9 @@ class UserMgmtActivity : AuthBaseActivity() {
 
     private fun save() {
 
-        var nulle = "null"
-        var empite = ""
-        Log.i(TAG, "save - userId: $userId isEmpty: ${userId.isEmpty()}")
-        Log.i(TAG, "save - userId: $userId isBlank: ${userId.isBlank()}")
-        Log.i(TAG, "save - userId: $userId  '': ${userId == ""}")
-        Log.i(TAG, "save - userId: $userId  nulle: ${userId == nulle}")
-        Log.i(TAG, "save - userId: $userId  empite: ${userId == empite}")
-        Log.i(TAG, "save - userId: $userId IF: ${userId.isEmpty() == false}")
-
+        Log.i(TAG, "save - userId: $userId")
 
         val userCreated = createNewUser()
-
 
         if (userId.isEmpty()) {
             lifecycleScope.launch {
@@ -152,7 +138,6 @@ class UserMgmtActivity : AuthBaseActivity() {
             }
         }
         finish()
-
     }
 
     private fun createNewUser(): User {
@@ -168,35 +153,25 @@ class UserMgmtActivity : AuthBaseActivity() {
         val email = binding.textInputEditTextEmail.text.toString()
         val cellphone = binding.textInputEditTextCellphone.text.toString()
         val telegram = binding.textInputEditTextTelegram.text.toString()
+        val user = User()
 
-        if (userId.isEmpty() == false)
-            return User(
-                id = userId,
-                userName = userName,
-                name = name,
-                password = password,
-                imgPath = imgPath,
-                email = email,
-                cellphone = cellphone,
-                telegram = telegram,
-                isAdmin = userSearched.isAdmin,
-                createdAt = userSearched.createdAt,
-                deleted = false,
-                updated = updatedAt
-            )
+        user.userName = userName
+        user.name = name
+        user.password = password
+        user.imgPath = imgPath
+        user.email = email
+        user.cellphone = cellphone
+        user.telegram = telegram
+        user.isAdmin = userSearched.isAdmin
+        user.createdAt = userSearched.createdAt
+        user.updated = updatedAt
 
-        return User(
-            userName = userName,
-            name = name,
-            password = password,
-            imgPath = imgPath,
-            email = email,
-            cellphone = cellphone,
-            telegram = telegram,
-            isAdmin = false,
-            createdAt = updatedAt,
-            deleted = false,
-            updated = updatedAt
-        )
+        if (userId.isNotEmpty()) {
+            user.id = userSearched.id
+            user.isAdmin = userSearched.isAdmin
+            user.createdAt = userSearched.createdAt
+        }
+
+        return user
     }
 }

@@ -8,7 +8,7 @@
     tools:context=".ui.CarMgmtActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/activity_car_mgmt_toolbar"
+        android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/purple_700"
@@ -21,17 +21,17 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:titleTextColor="@color/white"
 
-        app:title="@string/iot" />
+        app:title="@string/car" />
 
     <ScrollView
-        android:id="@+id/activity_car_mgmt_scrollview"
+        android:id="@+id/scrollview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_car_mgmt_toolbar">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -39,46 +39,171 @@
             tools:context=".ui.activity.IotMgmtForm">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/activity_car_mgmt_textInputLayout_name"
+                android:id="@+id/textInputLayout_brand"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_conversion_absoluteHeight="61dp"
-                tools:layout_conversion_absoluteWidth="0dp"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="24dp">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/activity_car_editText_name"
+                    android:id="@+id/textInputEditText_brand"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/name"
+                    android:hint="@string/brand"
                     android:inputType="text"
-                    tools:layout_conversion_absoluteHeight="56dp"
-                    tools:layout_conversion_absoluteWidth="0dp"
-                    tools:layout_editor_absoluteX="16dp"
-                    tools:layout_editor_absoluteY="29dp" />
+                    android:minHeight="48dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_model"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_brand"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_brand"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_brand">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText_model"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/model"
+                    android:inputType="text"
+                    android:minHeight="48dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_kind"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_model"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_model"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_model">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText_kind"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/kind"
+                    android:inputType="text"
+                    android:minHeight="48dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_fuel"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_kind"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_kind"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_kind">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText_fuel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/fuel"
+                    android:inputType="text"
+                    android:minHeight="48dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_plate"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_fuel"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_fuel"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_fuel">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText_plate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/plate"
+                    android:inputType="text"
+                    android:minHeight="48dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_yearOfFabrication"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_plate"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_plate"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_plate">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText_yearOfFabrication"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/yearOfFabrication"
+                    android:inputType="text"
+                    android:minHeight="48dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_yearOfModel"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_yearOfFabrication"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_yearOfFabrication"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_yearOfFabrication">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText_yearOfModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/yearOfModel"
+                    android:inputType="text"
+                    android:minHeight="48dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_color"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_yearOfModel"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_yearOfModel"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_yearOfModel">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/color"
+                    android:inputType="text"
+                    android:minHeight="48dp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
+
+
             <Spinner
-                android:id="@+id/activity_car_mgmt_spinner_group"
+                android:id="@+id/spinner_group"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_car_mgmt_textInputLayout_name"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout_color"
                 app:layout_constraintVertical_bias="0.0"
                 tools:layout_conversion_absoluteHeight="61dp"
                 tools:layout_conversion_absoluteWidth="0dp"
