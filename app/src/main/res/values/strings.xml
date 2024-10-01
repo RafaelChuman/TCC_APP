@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PJI610</string>
+    <string name="app_name">UNIVESP</string>
     <string name="user">Usuário</string>
 
     <string name="name">Nome</string>
@@ -63,6 +63,12 @@
     <string name="color">Cor</string>
     <string name="car">Carro</string>
     <string name="newCar">Novo Carro</string>
+    <string name="id">Identificação</string>
+    <string name="date">Data</string>
+    <string name="km">KM</string>
+    <string name="statusExecution">Estatus Execução</string>
+    <string name="statusOrder">Estatus Serviço</string>
+    <string name="orders">Serviço</string>
 
 
 </resources>

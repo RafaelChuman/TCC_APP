@@ -4,23 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.ItemActivity">
-
+    tools:context=".ui.OrdersActivity">
 
     <TextView
-        android:id="@+id/activity_item_textView"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/group"
+        android:text="@string/client"
         android:textSize="24sp"
-        android:visibility="gone"
+        android:textColor="@color/black"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/activity_item_recyclerview"
+        android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
@@ -30,15 +30,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="2"
         tools:itemCount="10"
-        tools:listitem="@layout/recyclerview_item" />
+        tools:listitem="@layout/recyclerview_order" />
 
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/activity_item_fab"
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="@string/newGroup"
+        android:text= "@string/newUser"
         app:icon="@drawable/ic_action_criacao"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
+import java.util.UUID
 
 @Entity(
     foreignKeys = [
@@ -21,19 +23,37 @@ import androidx.room.PrimaryKey
         )
     ]
 )
-data class Orders(
+class Orders(){
     @PrimaryKey(autoGenerate = false)
-    val id: String,
+    var id: String
     @ColumnInfo(index = true)
-    val userId: String,
+    var userId: String
     @ColumnInfo(index = true)
-    val carId: String,
-    val km: Int,
-    val fuel: Double,
-    val statusExecution: String,
-    val statusOrder: Boolean,
+    var carId: String
+    var km: Int
+    var fuel: Double
+    var statusExecution: String
+    var statusOrder: Boolean
     @ColumnInfo(index = true)
-    val createdAt: String,
-    val deleted: Boolean,
-    val updated: String,
-)
+    var createdAt: LocalDateTime
+    var deleted: Boolean
+    var updated: LocalDateTime
+
+    init {
+        id = UUID.randomUUID().toString();
+        km = 0;
+        fuel = 0.0;
+        statusExecution = "";
+        statusOrder = false;
+        createdAt = LocalDateTime.now();
+        deleted = false;
+        updated = LocalDateTime.now();
+
+        userId = "";
+        carId = "";
+    }
+
+    override fun toString(): String {
+    return ("$id - $userId, $carId")
+    }
+}

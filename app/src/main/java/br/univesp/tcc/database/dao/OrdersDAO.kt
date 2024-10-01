@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface OrdersDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(order: Orders)
+    suspend fun save(order: List<Orders>)
 
     @Query("""SELECT * FROM Orders
             WHERE userId = :userId 
@@ -19,14 +19,22 @@ interface OrdersDAO {
     fun getAllByUser(userId: String): Flow<List<Orders>>?
 
     @Query("""SELECT * FROM Orders
-            WHERE deleted = 0""")
-    fun getAll(): Flow<List<Orders>>?
+            WHERE id IN(:id)  
+            AND deleted = 0""")
+    fun getById(id: List<String>): Flow<List<Orders>>
 
-    @Query("UPDATE Orders set deleted = 1 WHERE id = :orderId")
-    suspend fun remove(orderId: String)
+    @Query("""SELECT * FROM Orders
+            WHERE deleted = 0""")
+    fun getAll(): Flow<List<Orders>>
+
+    @Query("UPDATE Orders set deleted = 1 WHERE id IN (:orderId)")
+    suspend fun remove(orderId: List<String>)
 
     @Query("UPDATE Orders set statusOrder = 1 WHERE id = :orderId")
     suspend fun setDone(orderId: String)
+
+
+
 }
 
 //It's very important to multiple database statements

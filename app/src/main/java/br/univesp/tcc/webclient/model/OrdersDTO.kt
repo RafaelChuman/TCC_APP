@@ -4,24 +4,24 @@ import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.database.model.User
 
 class DTOCreateOrders (
-    km: Int,
-    fuel: Int,
-    statusExecution: String,
-    statusOrder: Boolean,
-    car: Car,
-    user: User
+    val km: Int,
+    val fuel: Int,
+    val statusExecution: String,
+    val statusOrder: Boolean,
+    val car: Car,
+    val user: User
 )
 
 class DTOUpdateOrders (
-    id: String,
-    km: Int,
-    fuel: Int,
-    statusExecution: String,
-    statusOrder: Boolean,
-    car: Car,
-    user: User
+    val id: String,
+    val km: Int,
+    val fuel: Int,
+    val statusExecution: String,
+    val statusOrder: Boolean,
+    val car: Car,
+    val user: User
 )
 
 class DTODeleteOrders (
-    id: List<String>,
+    val id: List<String>,
 )

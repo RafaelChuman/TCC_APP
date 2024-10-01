@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import br.univesp.tcc.R
 import br.univesp.tcc.ui.AuthBaseActivity
 import br.univesp.tcc.ui.CarActivity
+import br.univesp.tcc.ui.OrdersActivity
 import br.univesp.tcc.ui.UserActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
@@ -57,14 +58,14 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
             R.id.navigation_menu_home -> supportFragmentManager.beginTransaction()
                 .replace(R.id.drawer_navigation_frameLayout, CarActivity()).commit()
 
-            R.id.navigation_menu_iot -> supportFragmentManager.beginTransaction()
+            R.id.navigation_menu_car -> supportFragmentManager.beginTransaction()
                 .replace(R.id.drawer_navigation_frameLayout, CarActivity()).commit()
-
-            R.id.navigation_menu_group -> supportFragmentManager.beginTransaction()
-                .replace(R.id.drawer_navigation_frameLayout, ItemActivity()).commit()
 
             R.id.navigation_menu_user -> supportFragmentManager.beginTransaction()
                 .replace(R.id.drawer_navigation_frameLayout, UserActivity()).commit()
+
+            R.id.navigation_menu_orders -> supportFragmentManager.beginTransaction()
+                .replace(R.id.drawer_navigation_frameLayout, OrdersActivity()).commit()
 
             R.id.navigation_menu_logout -> lifecycleScope.launch {
                 Log.i(TAG, "onNavigationItemSelected: navigation_menu_logout")

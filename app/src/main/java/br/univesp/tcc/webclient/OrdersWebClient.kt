@@ -12,66 +12,80 @@ class OrdersWebClient {
 
     private val ordersService = RetrofitInicializador().ordersService
 
-    suspend fun listByUser(userId: String): List<Orders>?
+    suspend fun listAll(userToken: String): List<Orders>?
+    {
+        try {
+            val listResp = ordersService.listAll(userToken)
+
+            return listResp.body()
+        } catch (e: Exception) {
+            Log.e(TAG, "listAll - Error: ", e)
+
+        }
+        return null
+    }
+
+
+    suspend fun listByUser(userToken: String, userId: String): List<Orders>?
     {
          try {
-            val listResp = ordersService.listByUser(userId)
+            val listResp = ordersService.listByUser(userToken, userId)
 
              return listResp.body()
         } catch (e: Exception) {
-             Log.e(TAG, "listByUser", e)
+             Log.e(TAG, "listByUser - Error: ", e)
 
         }
         return null
     }
 
-    suspend fun findByCar(plate: String): List<Orders>?
+    suspend fun findByCar(userToken: String, plate: String): List<Orders>?
     {
         try {
-            val listResp = ordersService.findByCar(plate)
+            val listResp = ordersService.listByCar(userToken, plate)
 
             return listResp.body()
         } catch (e: Exception) {
-            Log.e(TAG, "findByCar", e)
+            Log.e(TAG, "findByCar - Error: ", e)
 
         }
         return null
     }
 
-    suspend fun create(data: DTOCreateOrders): Orders?
+    suspend fun create(userToken: String, data: Orders): Orders?
     {
         try {
-            val listResp = ordersService.create(data)
+            val listResp = ordersService.create(userToken, data)
 
             return listResp.body()
         } catch (e: Exception) {
-            Log.e(TAG, "create", e)
+            Log.e(TAG, "create - Error: ", e)
 
         }
         return null
     }
 
-    suspend fun update(data: DTOUpdateOrders): Orders?
+    suspend fun update(userToken: String, data: Orders): Orders?
     {
         try {
-            val listResp = ordersService.update(data)
+            val listResp = ordersService.update(userToken, data)
 
             return listResp.body()
         } catch (e: Exception) {
-            Log.e(TAG, "update", e)
+            Log.e(TAG, "update - Error: ", e)
 
         }
         return null
     }
 
-    suspend fun delete(data: DTODeleteOrders): Orders?
+    suspend fun delete(userToken: String, data: DTODeleteOrders): Orders?
     {
         try {
-            val listResp = ordersService.delete(data)
+            val listResp = ordersService.delete(userToken, data)
 
             return listResp.body()
         } catch (e: Exception) {
-            Log.e(TAG, "delete", e)
+            Log.e(TAG, "delete - Error: ", e)
 
         }
         return null

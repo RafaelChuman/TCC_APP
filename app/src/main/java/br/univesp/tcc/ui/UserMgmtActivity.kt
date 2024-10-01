@@ -8,18 +8,11 @@ import androidx.lifecycle.lifecycleScope
 import br.univesp.tcc.R
 import br.univesp.tcc.database.DataSource
 import br.univesp.tcc.database.model.User
-import br.univesp.tcc.databinding.ActivityItemMgmtBinding
 import br.univesp.tcc.databinding.ActivityUserMgmtBinding
-import br.univesp.tcc.extensions.dataStore
 import br.univesp.tcc.repository.UserRepository
-import br.univesp.tcc.ui.activity.NavigationDrawer
 import br.univesp.tcc.ui.activity.USER_ID
 import br.univesp.tcc.webclient.UserWebClient
-import br.univesp.tcc.webclient.model.DTOCreateUser
-import br.univesp.tcc.webclient.model.DTOUpdateUser
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 

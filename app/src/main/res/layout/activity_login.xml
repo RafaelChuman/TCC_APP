@@ -25,21 +25,17 @@
         tools:layout_conversion_absoluteWidth="100dp" />
 
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/activity_login_textInputlayout_userName"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_login_imageView_logo"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_login_imageView_logo"
         tools:layout_conversion_absoluteHeight="61dp"
-        tools:layout_editor_absoluteY="24dp"
-        tools:layout_editor_absoluteX="16dp"
         tools:layout_conversion_absoluteWidth="0dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -49,15 +45,14 @@
             android:hint="@string/user"
             android:inputType="text"
             tools:layout_conversion_absoluteHeight="56dp"
-            tools:layout_editor_absoluteY="29dp"
+            tools:layout_conversion_absoluteWidth="0dp"
             tools:layout_editor_absoluteX="16dp"
-            tools:layout_conversion_absoluteWidth="0dp" />
+            tools:layout_editor_absoluteY="29dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/activity_login_textInputlayout_password"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -77,25 +72,29 @@
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword"
+            android:textIsSelectable="true"
             tools:layout_conversion_absoluteHeight="56dp"
-            tools:layout_editor_absoluteY="21dp"
+            tools:layout_conversion_absoluteWidth="0dp"
             tools:layout_editor_absoluteX="16dp"
-            tools:layout_conversion_absoluteWidth="0dp" />
+            tools:layout_editor_absoluteY="21dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/activity_login_button_login"
+        style="@style/CustomButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:onClick="authenticationOnClick"
         android:layout_marginTop="16dp"
+        android:onClick="authenticationOnClick"
         android:text="@string/logIn"
+        app:circularflow_defaultRadius="16dp"
+        app:circularflow_radiusInDP="16dp"
+        app:cornerRadius="16dp"
+        app:layout_constraintCircleRadius="16dp"
         app:layout_constraintEnd_toEndOf="@id/activity_login_textInputlayout_password"
         app:layout_constraintStart_toStartOf="@id/activity_login_textInputlayout_password"
         app:layout_constraintTop_toBottomOf="@id/activity_login_textInputlayout_password"
         tools:layout_conversion_absoluteHeight="105dp"
-        tools:layout_editor_absoluteY="16dp"
-        tools:layout_editor_absoluteX="0dp"
         tools:layout_conversion_absoluteWidth="0dp" />
 
 
@@ -104,10 +103,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
         android:onClick="addUserOnClick"
         android:text="@string/addUser"
-        android:textColor="@color/primaryColor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

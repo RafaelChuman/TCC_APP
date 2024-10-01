@@ -1,22 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#fbc02d</color>
-    <color name="primaryLightColor">#fff263</color>
-    <color name="primaryDarkColor">#c49000</color>
-    <color name="secondaryColor">#00e5ff</color>
-    <color name="secondaryLightColor">#6effff</color>
-    <color name="secondaryDarkColor">#00b2cc</color>
-    <color name="primaryTextColor">#000000</color>
-    <color name="secondaryTextColor">#000000</color>
+    <color name="primaryColor">@color/popOs_button_text_900</color>
+    <color name="primaryLightColor">@color/popOs_button_text_900</color>
+    <color name="primaryDarkColor">@color/popOs_button_text_900</color>
+    <color name="secondaryColor">@color/popOs_button_text_900</color>
+    <color name="secondaryLightColor">@color/popOs_button_text_900</color>
+    <color name="secondaryDarkColor">@color/popOs_button_text_900</color>
+    <color name="primaryTextColor">@color/popOs_button_text_900</color>
+    <color name="secondaryTextColor">@color/popOs_button_text_900</color>
+<!--    <color name="primaryColor">#fbc02d</color>-->
+<!--    <color name="primaryLightColor">#fff263</color>-->
+<!--    <color name="primaryDarkColor">#c49000</color>-->
+<!--    <color name="secondaryColor">#00e5ff</color>-->
+<!--    <color name="secondaryLightColor">#6effff</color>-->
+<!--    <color name="secondaryDarkColor">#00b2cc</color>-->
+<!--    <color name="primaryTextColor">#000000</color>-->
+<!--    <color name="secondaryTextColor">#000000</color>-->
+
 
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FF000000</color>
 
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <color name="logo_background">#6240B1</color>
+
+
+    <color name="popOs_button_background_900">#FF191919</color>
+    <color name="popOs_button_background_500">#FF94ebeb</color>
+    <color name="popOs_button_background_300">#FF303030</color>
+    <color name="popOs_button_text_900">#FF9b9b9b</color>
+    <color name="popOs_button_text_500">#FF2c4646</color>
+    <color name="popOs_button_text_300">#FF9b9b9b</color>
+
+    <color name="popOs_background_500">#FF272727</color>
+    <color name="popOs_background_300">#FF303030</color>
+
+    <color name="popOs_radioButton_background_500">#FFfbb86c</color>
+    <color name="popOs_radioButton_background_300">#FF686868</color>
+    <color name="popOs_radioButton_text_500">#FF3f3f3f</color>
+
+    <color name="popOs_textBox_border_900">@color/black</color>
+    <color name="popOs_textBox_border_500">#FFfbb86c</color>
+    <color name="popOs_textBox_background_500">#FF191919</color>
+    <color name="popOs_textBox_text_500">#FFe6e6e6</color>
+
 
 
 
