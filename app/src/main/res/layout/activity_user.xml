@@ -6,15 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.UserActivity">
 
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/client"
         android:textSize="24sp"
-        android:textColor="@color/black"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +30,6 @@
         tools:itemCount="10"
         tools:listitem="@layout/recyclerview_user" />
 
-
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -42,6 +38,6 @@
         android:text= "@string/newUser"
         app:icon="@drawable/ic_action_criacao"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/CustomButton"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

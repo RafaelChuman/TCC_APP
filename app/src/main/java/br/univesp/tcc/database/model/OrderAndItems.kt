@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.time.LocalDateTime
 import java.util.UUID
 
 @Entity(
@@ -13,26 +14,51 @@ import java.util.UUID
             parentColumns = ["id"],
             childColumns = ["orderId"],
             onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = Item::class,
-            parentColumns = ["id"],
-            childColumns = ["itemId"],
-            onDelete = ForeignKey.CASCADE
         )
+//        ForeignKey(
+//            entity = Item::class,
+//            parentColumns = ["id"],
+//            childColumns = ["itemId"],
+//            onDelete = ForeignKey.CASCADE
+//        )
     ]
 )
-data class OrderAndItems(
+class OrderAndItems() {
     @PrimaryKey(autoGenerate = false)
-    val id: String= UUID.randomUUID().toString(),
+    var id: String = UUID.randomUUID().toString()
+
     @ColumnInfo(index = true)
-    val orderId: String,
-    @ColumnInfo(index = true)
-    val itemId: String,
-    val quantity: Int,
-    val price: Double,
-    val discount: Double,
-    val createdAt: String,
-    val deleted: Boolean,
-    val updated: String,
-)
+    var orderId: String
+
+    //@ColumnInfo(index = true)
+    //val itemId: String,
+    var type: String
+    var name: String
+    var unitMeasurement: String
+    var quantity: Int
+    var price: Double
+    var discount: Double
+    var createdAt: LocalDateTime
+    var deleted: Boolean
+    var updated: LocalDateTime
+
+    init {
+        id = UUID.randomUUID().toString()
+
+        orderId = ""
+
+        type = ""
+        name = ""
+        unitMeasurement = ""
+        quantity = 0
+        price = 0.0
+        discount = 0.0
+        createdAt =  LocalDateTime.now();
+        deleted = false
+        updated =  LocalDateTime.now();
+    }
+
+    override fun toString(): String {
+        return ("$id - $orderId, $name")
+    }
+}

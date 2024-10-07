@@ -52,16 +52,13 @@ class UserRepository(
 
         val userToken = getToken()
 
-        val userWeb = userWebClient.list(userToken)
-        val users = userDao.getAll().firstOrNull() ?: listOf<User>()
+        val userWeb = userWebClient.list(userToken)?: listOf<User>()
+        val usersDAO = userDao.getAll().firstOrNull() ?: listOf<User>()
         val updList: MutableList<User> = mutableListOf<User>()
-
-        if (users.isEmpty()) return
-        if (userWeb == null) return
 
 
         for (user in userWeb) {
-            val updUser = users.find { usr -> usr.id == user.id }
+            val updUser = usersDAO.find { usr -> usr.id == user.id }
             if (updUser == null || updUser.updated < user.updated) {
                 updList.add(user)
             }

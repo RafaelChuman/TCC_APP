@@ -1,5 +1,6 @@
 package br.univesp.tcc.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import br.univesp.tcc.R
 import br.univesp.tcc.database.DataSource
 import br.univesp.tcc.database.model.Car
+import br.univesp.tcc.database.model.OrderAndItems
 import br.univesp.tcc.database.model.Orders
 import br.univesp.tcc.databinding.ActivityCarMgmtBinding
 import br.univesp.tcc.databinding.ActivityOrdersMgmtBinding
@@ -57,6 +59,10 @@ class OrdersMgmtActivity : AuthBaseActivity() {
 
         super.onCreate(savedInstanceState)
 
+        binding.buttonAddItem.setOnClickListener {
+            addItem()
+        }
+
         setSupportActionBar(binding.toolbar)
 
         setContentView(binding.root)
@@ -66,10 +72,12 @@ class OrdersMgmtActivity : AuthBaseActivity() {
                 getOrdersID()
             }
             launch {
-                setGroupOnSpinner()
+                setCarOnSpinner()
             }
         }
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         Log.i(TAG, "onCreateOptionsMenu - menu: $menu")
@@ -113,7 +121,7 @@ class OrdersMgmtActivity : AuthBaseActivity() {
 
     }
 
-    private suspend fun setGroupOnSpinner() {
+    private suspend fun setCarOnSpinner() {
 
         val spinner = binding.spinnerCar
 
@@ -143,6 +151,8 @@ class OrdersMgmtActivity : AuthBaseActivity() {
             }
         }
     }
+
+
 
 
     private fun remove() {
@@ -206,5 +216,32 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         }
 
         return newOrders
+    }
+
+    private fun createNewOrderAndItems(): OrderAndItems {
+
+        Log.i(TAG, "createNewOrderAndItems")
+
+        val updateAt = LocalDateTime.now()
+
+        val description = binding.textInputEditTextDescription.text.toString()
+        val quantity = binding.textInputEditTextQuantity.text.toString()
+        val price = binding.textInputEditTextPrice.text.toString()
+
+        val newOrderAndItems = OrderAndItems()
+
+        newOrderAndItems.name = description
+        newOrderAndItems.price = price.toDouble()
+        newOrderAndItems.type = "PÇ"
+        newOrderAndItems.discount = 0.0
+        newOrderAndItems.quantity = quantity.toInt()
+        newOrderAndItems.unitMeasurement = ""
+
+        return newOrderAndItems
+    }
+
+
+    private fun addItem() {
+
     }
 }

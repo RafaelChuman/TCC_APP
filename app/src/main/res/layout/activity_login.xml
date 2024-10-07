@@ -81,21 +81,17 @@
 
     <Button
         android:id="@+id/activity_login_button_login"
-        style="@style/CustomButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:onClick="authenticationOnClick"
         android:text="@string/logIn"
-        app:circularflow_defaultRadius="16dp"
-        app:circularflow_radiusInDP="16dp"
-        app:cornerRadius="16dp"
-        app:layout_constraintCircleRadius="16dp"
         app:layout_constraintEnd_toEndOf="@id/activity_login_textInputlayout_password"
         app:layout_constraintStart_toStartOf="@id/activity_login_textInputlayout_password"
         app:layout_constraintTop_toBottomOf="@id/activity_login_textInputlayout_password"
         tools:layout_conversion_absoluteHeight="105dp"
-        tools:layout_conversion_absoluteWidth="0dp" />
+        tools:layout_conversion_absoluteWidth="0dp"
+        style="@style/CustomButton"/>
 
 
     <Button

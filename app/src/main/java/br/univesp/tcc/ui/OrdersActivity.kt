@@ -93,7 +93,7 @@ class OrdersActivity : Fragment() {
     }
 
     private fun setFab() {
-        val intent = Intent(requireActivity(), CarMgmtActivity::class.java)
+        val intent = Intent(requireActivity(), OrdersMgmtActivity::class.java)
         startActivity(intent)
     }
 

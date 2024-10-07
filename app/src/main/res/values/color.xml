@@ -19,10 +19,15 @@
 
 
     <color name="black">#FF000000</color>
-    <color name="white">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
 
-    <color name="logo_background">#6240B1</color>
+    <color name="logo_background">@color/popOs_background_500</color>
 
+    <color name="popOs_background_300">#FF303030</color>
+    <color name="popOs_background_500">#FF272727</color>
+    <color name="popOs_border_300">#FF272727</color>
+    <color name="popOs_border_500">#FF191919</color>
 
     <color name="popOs_button_background_900">#FF191919</color>
     <color name="popOs_button_background_500">#FF94ebeb</color>
@@ -31,8 +36,7 @@
     <color name="popOs_button_text_500">#FF2c4646</color>
     <color name="popOs_button_text_300">#FF9b9b9b</color>
 
-    <color name="popOs_background_500">#FF272727</color>
-    <color name="popOs_background_300">#FF303030</color>
+
 
     <color name="popOs_radioButton_background_500">#FFfbb86c</color>
     <color name="popOs_radioButton_background_300">#FF686868</color>

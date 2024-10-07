@@ -15,7 +15,7 @@ interface OrderAndItemsDAO {
     suspend fun save(orderAndItems: OrderAndItems):Long
 
     @RewriteQueriesToDropUnusedColumns
-    @Query("""SELECT OrderAndItems.id, OrderAndItems.orderId, OrderAndItems.itemId, OrderAndItems.quantity, OrderAndItems.price, OrderAndItems.discount, OrderAndItems.createdAt, OrderAndItems.deleted, OrderAndItems.updated, Orders.userId 
+    @Query("""SELECT OrderAndItems.id, OrderAndItems.orderId, OrderAndItems.type, OrderAndItems.name, OrderAndItems.unitMeasurement, OrderAndItems.quantity, OrderAndItems.price, OrderAndItems.discount, OrderAndItems.createdAt, OrderAndItems.deleted, OrderAndItems.updated, Orders.userId 
             FROM OrderAndItems
             INNER JOIN Orders ON OrderAndItems.orderId = Orders.id
             WHERE Orders.userId = :userId 

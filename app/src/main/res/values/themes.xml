@@ -1,7 +1,26 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="Theme.TCC" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    </style>
 
-        <item name="buttonStyle">@style/CustomButton</item>
+    <style name="Base.Theme.TCC" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="android:textColorPrimary">@color/primaryColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorOnPrimary">@color/popOs_textBox_text_500</item>
+        <item name="colorAccent">@color/popOs_textBox_text_500</item>
+
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorOnSecondary">@color/popOs_textBox_text_500</item>
+
+        <item name="android:windowBackground">@color/popOs_background_500</item>
+
+        <item name="textInputStyle">@style/CustomTextInputStyle</item>
+        <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
+        <item name="editTextStyle">@style/CustomTextInputEditTextStyle</item>
+        <item name="android:buttonStyle">@style/CustomButton</item>
+        <item name="cardViewStyle">@style/CustomCardView</item>
 
     </style>
 
@@ -11,6 +30,22 @@
         <item  name="textOutlineColor">@color/popOs_textBox_text_500</item>
         <item name="hintTextAppearance">@style/CustomHintStyle</item>
         <item name="android:textColorHint">@color/popOs_textBox_text_500</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="CustomTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:background">@color/popOs_textBox_background_500</item>
+        <item name="android:textColorHint">@color/popOs_textBox_text_500</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:minHeight">26dp</item>
     </style>
 
     <style name="CustomHintStyle" parent="TextAppearance.AppCompat">
@@ -29,43 +64,30 @@
         <item name="android:backgroundTint">@color/white</item>
         <item name="hintTextAppearance">@style/CustomHintStyle</item>
         <item name="editTextColor">@color/popOs_textBox_text_500</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="CustomNavigation">
+        <item name="colorPrimary">@color/popOs_button_text_500</item>
+        <item name="colorControlHighlight">@color/popOs_button_background_500</item>
+    </style>
 
-
-    <style name="Base.Theme.TCC" parent="Theme.Material3.DayNight.NoActionBar">
-
-        <item name="android:textColorPrimary">@color/primaryColor</item>
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
-        <item name="colorOnPrimary">@color/popOs_textBox_text_500</item>
-        <item name="colorAccent">@color/popOs_textBox_text_500</item>
-
-        <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
-        <item name="colorOnSecondary">@color/popOs_textBox_text_500</item>
-
-        <item name="android:windowBackground">@color/popOs_background_500</item>
-
-        <item name="textInputStyle">@style/CustomTextInputStyle</item>
-
-        <item name="editTextStyle">@style/CustomTextInputEditTextStyle</item>
-
-        <item name="buttonStyle">@style/CustomButton</item>
-
+    <style name="CustomCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:backgroundTint">@color/popOs_background_300</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="strokeColor">@color/popOs_border_500</item>
+        <item name="strokeWidth">8dp</item>
     </style>
 
     <style name="CustomButton" parent="Widget.MaterialComponents.Button.TextButton">
-
-<!--        <item name="android:textColorPrimary">@color/popOs_button_text_900</item>-->
-<!--        <item name="colorPrimary">@color/popOs_button_background_900</item>-->
-
-
         <item name="android:textColor">@color/popOs_button_text_500</item>
-        <item name="android:backgroundTint">@color/popOs_button_background_500</item>
+        <item name="backgroundTint">@color/popOs_button_background_500</item>
         <item name="android:padding">0dp</item>
-        <item name="cornerRadius">16dp</item>
-        <item name="android:textSize">16sp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textSize">12sp</item>
     </style>
+
 </resources>

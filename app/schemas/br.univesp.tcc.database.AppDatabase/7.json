@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "e7eff53abf0a57385010ba836d1ad763",
+    "identityHash": "e6d76782a9eaf3b948d42f2faaf1f0c3",
     "entities": [
       {
         "tableName": "User",
@@ -101,7 +101,7 @@
       },
       {
         "tableName": "Car",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `brand` TEXT NOT NULL, `model` TEXT NOT NULL, `kind` TEXT NOT NULL, `type` TEXT NOT NULL, `plate` TEXT NOT NULL, `yearOfFabrication` INTEGER NOT NULL, `yearOfModel` INTEGER NOT NULL, `color` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `userId` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `updated` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`userId`) REFERENCES `User`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `brand` TEXT NOT NULL, `model` TEXT NOT NULL, `kind` TEXT NOT NULL, `type` TEXT NOT NULL, `plate` TEXT NOT NULL, `yearOfFabrication` INTEGER NOT NULL, `yearOfModel` INTEGER NOT NULL, `color` TEXT NOT NULL, `createdAt` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `updated` TEXT NOT NULL, `userId` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`userId`) REFERENCES `User`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -164,12 +164,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "userId",
-            "columnName": "userId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "deleted",
             "columnName": "deleted",
             "affinity": "INTEGER",
@@ -178,6 +172,12 @@
           {
             "fieldPath": "updated",
             "columnName": "updated",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -426,7 +426,7 @@
       },
       {
         "tableName": "OrderAndItems",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderId` TEXT NOT NULL, `itemId` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `price` REAL NOT NULL, `discount` REAL NOT NULL, `createdAt` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `updated` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`orderId`) REFERENCES `Orders`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`itemId`) REFERENCES `Item`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `orderId` TEXT NOT NULL, `type` TEXT NOT NULL, `name` TEXT NOT NULL, `unitMeasurement` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `price` REAL NOT NULL, `discount` REAL NOT NULL, `createdAt` TEXT NOT NULL, `deleted` INTEGER NOT NULL, `updated` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`orderId`) REFERENCES `Orders`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -441,8 +441,20 @@
             "notNull": true
           },
           {
-            "fieldPath": "itemId",
-            "columnName": "itemId",
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unitMeasurement",
+            "columnName": "unitMeasurement",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -498,15 +510,6 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_OrderAndItems_orderId` ON `${TABLE_NAME}` (`orderId`)"
-          },
-          {
-            "name": "index_OrderAndItems_itemId",
-            "unique": false,
-            "columnNames": [
-              "itemId"
-            ],
-            "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_OrderAndItems_itemId` ON `${TABLE_NAME}` (`itemId`)"
           }
         ],
         "foreignKeys": [
@@ -516,17 +519,6 @@
             "onUpdate": "NO ACTION",
             "columns": [
               "orderId"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          },
-          {
-            "table": "Item",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "itemId"
             ],
             "referencedColumns": [
               "id"
@@ -573,7 +565,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e7eff53abf0a57385010ba836d1ad763')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e6d76782a9eaf3b948d42f2faaf1f0c3')"
     ]
   }
 }

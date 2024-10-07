@@ -53,6 +53,7 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
         Log.i(TAG, "onNavigationItemSelected: $item.itemId")
         when (item.itemId) {
             R.id.navigation_menu_home -> supportFragmentManager.beginTransaction()
@@ -88,8 +89,6 @@ class NavigationDrawer : AuthBaseActivity(), NavigationView.OnNavigationItemSele
     }
 
     private suspend fun logout() {
-
         this.redirectToLogin()
-
     }
 }
