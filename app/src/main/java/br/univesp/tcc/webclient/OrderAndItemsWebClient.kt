@@ -13,10 +13,10 @@ class OrderAndItemsWebClient {
 
     private val orderAndItemsService = RetrofitInicializador().orderAndItemsService
 
-    suspend fun listByUser(data: DTOListOrderAndItemsByUser): List<OrderAndItems>?
+    suspend fun listByUser(userId: String): List<OrderAndItems>?
     {
          try {
-            val listResp = orderAndItemsService.listByUser(data)
+            val listResp = orderAndItemsService.listByUser(userId)
 
              return listResp.body()
         } catch (e: Exception) {

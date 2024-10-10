@@ -62,11 +62,11 @@ class UserWebClient {
         try {
             val listResp = userService.list(userToken)
 
-            Log.i(TAG, "userToken - listResp: $listResp")
+            Log.i(TAG, "list - listResp: ${listResp.body()}")
             return listResp.body()
 
         } catch (e: Exception) {
-            Log.e(TAG, "userToken - Error: ", e)
+            Log.e(TAG, "list - Error: ", e)
         }
         return null
     }

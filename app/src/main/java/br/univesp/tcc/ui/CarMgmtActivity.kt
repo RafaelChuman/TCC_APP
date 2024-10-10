@@ -135,12 +135,12 @@ class CarMgmtActivity : AuthBaseActivity() {
                     id: Long
                 ) {
 
-                    selectedIdOnSpinner = group[position].id
+                    selectedIdOnSpinner = group[position].userId
                     Log.i(TAG, "setGroupOnSpinner: $selectedIdOnSpinner")
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectedIdOnSpinner = group[0].id
+                    selectedIdOnSpinner = group[0].userId
                 }
             }
         }
@@ -210,7 +210,7 @@ class CarMgmtActivity : AuthBaseActivity() {
         newCar.updated = updateAt
 
         if (carID.isNotEmpty()) {
-            newCar.id = carSearched.id
+            newCar.carId = carSearched.carId
             newCar.createdAt = carSearched.createdAt
         }
 

@@ -10,7 +10,7 @@ import java.util.UUID
 class User() {
 
     @PrimaryKey(autoGenerate = false)
-    var id: String = UUID.randomUUID().toString()
+    var userId: String = UUID.randomUUID().toString()
     var name: String
     var userName: String
     var password: String
@@ -52,7 +52,7 @@ class User() {
         deleted: Boolean,
         updated: LocalDateTime,
     ) : this() {
-        this.id = id
+        this.userId = id
         this.name = name
         this.userName = userName
         this.password = password
@@ -93,6 +93,6 @@ class User() {
     }
 
     override fun toString(): String {
-        return ("$id - $name")
+        return ("$userId - $name")
     }
 }

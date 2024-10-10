@@ -55,17 +55,29 @@ class UserRepository(
         val userWeb = userWebClient.list(userToken)?: listOf<User>()
         val usersDAO = userDao.getAll().firstOrNull() ?: listOf<User>()
         val updList: MutableList<User> = mutableListOf<User>()
-
+        val dltList: MutableList<String> = mutableListOf<String>()
 
         for (user in userWeb) {
-            val updUser = usersDAO.find { usr -> usr.id == user.id }
+            val updUser = usersDAO.find { usr -> usr.userId == user.userId }
             if (updUser == null || updUser.updated < user.updated) {
                 updList.add(user)
             }
         }
 
-        Log.i(TAG, "syncUsers - users: $updList")
+        Log.i(TAG, "syncUsers - updList: $updList")
         if (updList.isNotEmpty()) userDao.save(updList)
+
+
+        for (usrDAO in usersDAO) {
+            val updUser = userWeb.find { web -> web.userId == usrDAO.userId }
+            Log.i(TAG, "syncCar - dltList  carWeb: ${updUser?.updated.toString()} == carSqlite: ${usrDAO.updated}")
+            if (updUser == null){  // ||  updCar.updated < carSqlite.updated) {
+                dltList.add(usrDAO.userId)
+            }
+        }
+
+        Log.i(TAG, "syncCar - dltList: $dltList")
+        if (dltList.isNotEmpty())  userDao.purgeById(dltList)
     }
 
     fun getById(id: String): Flow<List<User>> {
@@ -103,7 +115,7 @@ class UserRepository(
         Log.i(TAG, "update - updateUser: $updateUser")
         val userToken = getToken()
 
-        val userSearched = userDao.getById(listOf(updateUser.id)).firstOrNull()
+        val userSearched = userDao.getById(listOf(updateUser.userId)).firstOrNull()
 
         if (userSearched.isNullOrEmpty()) return
 

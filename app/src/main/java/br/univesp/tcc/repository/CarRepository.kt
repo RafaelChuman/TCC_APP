@@ -80,7 +80,7 @@ class CarRepository(
         //if (carWeb == null) return
 
         for (carWeb in carListWeb) {
-            val updCar = carsListSqlite.find { car -> car.id == carWeb.id }
+            val updCar = carsListSqlite.find { car -> car.carId == carWeb.carId }
             if (updCar == null ||  updCar.updated < carWeb.updated) {
                 updList.add(carWeb)
             }
@@ -90,10 +90,10 @@ class CarRepository(
         if (updList.isNotEmpty())  carDAO.save(updList)
 
         for (carSqlite in carsListSqlite) {
-            val updCar = carListWeb.find { web -> web.id == carSqlite.id }
+            val updCar = carListWeb.find { web -> web.carId == carSqlite.carId }
             Log.i(TAG, "syncCar - dltList  carWeb: ${updCar?.updated.toString()} == carSqlite: ${carSqlite.updated}")
             if (updCar == null){  // ||  updCar.updated < carSqlite.updated) {
-                dltList.add(carSqlite.id)
+                dltList.add(carSqlite.carId)
             }
         }
 
@@ -124,7 +124,7 @@ class CarRepository(
         Log.i(TAG, "update - updCar: $updCar")
         val userToken = getToken()
 
-        val carSearched = carDAO.getById(listOf(updCar.id)).firstOrNull()
+        val carSearched = carDAO.getById(listOf(updCar.carId)).firstOrNull()
 
         if (carSearched.isNullOrEmpty()) return
 

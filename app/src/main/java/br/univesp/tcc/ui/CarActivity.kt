@@ -106,7 +106,7 @@ class CarActivity : Fragment() {
         recycleViewAdapter.carOnClickEvent = { car ->
             val intent = Intent(requireActivity(), CarMgmtActivity::class.java)
 
-            intent.putExtra(CAR_ID, car.id)
+            intent.putExtra(CAR_ID, car.carId)
             startActivity(intent)
         }
     }

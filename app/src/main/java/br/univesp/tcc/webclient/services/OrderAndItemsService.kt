@@ -26,7 +26,7 @@ interface OrderAndItemsService {
     suspend fun listByOrder(@Body data: DTOListOrderAndItemsByOrder) : Response<List<OrderAndItems>>
 
     @POST("orderAndItems")
-    suspend fun listByUser(@Body data: DTOListOrderAndItemsByUser) : Response<List<OrderAndItems>>
+    suspend fun listByUser(@Body userId: String) : Response<List<OrderAndItems>>
 
     @POST("orderAndItems")
     suspend fun delete(@Body data: DTODeleteOrderAndItems): Response<OrderAndItems>

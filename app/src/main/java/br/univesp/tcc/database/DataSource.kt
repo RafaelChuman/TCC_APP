@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 
 
 @Database(
-    version = 8,
+    version = 9,
     entities = [User::class, Car::class, Item::class, Orders::class, OrderAndItems::class, UserToken::class],
     exportSchema = true
 )

@@ -103,7 +103,7 @@ class UserActivity : Fragment() {
         recycleViewAdapter.userOnClickEvent = { user ->
             val intent = Intent(requireActivity(), UserMgmtActivity::class.java)
 
-            intent.putExtra(USER_ID, user.id)
+            intent.putExtra(USER_ID, user.userId)
             startActivity(intent)
         }
     }

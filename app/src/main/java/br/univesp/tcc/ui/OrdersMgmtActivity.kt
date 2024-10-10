@@ -1,6 +1,5 @@
 package br.univesp.tcc.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,16 +10,13 @@ import android.widget.ArrayAdapter
 import androidx.lifecycle.lifecycleScope
 import br.univesp.tcc.R
 import br.univesp.tcc.database.DataSource
-import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.database.model.OrderAndItems
 import br.univesp.tcc.database.model.Orders
-import br.univesp.tcc.databinding.ActivityCarMgmtBinding
 import br.univesp.tcc.databinding.ActivityOrdersMgmtBinding
-import br.univesp.tcc.repository.CarRepository
 import br.univesp.tcc.repository.OrdersRepository
-import br.univesp.tcc.ui.activity.CAR_ID
+import br.univesp.tcc.repository.OrderAndItemsRepository
 import br.univesp.tcc.ui.activity.ORDERS_ID
-import br.univesp.tcc.webclient.CarWebClient
+import br.univesp.tcc.webclient.OrderAndItemsWebClient
 import br.univesp.tcc.webclient.OrdersWebClient
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -31,8 +27,14 @@ private const val TAG = "OrdersMgmtActivity"
 class OrdersMgmtActivity : AuthBaseActivity() {
 
     private var selectedIdOnSpinner = ""
+    private var selectedIdOnSpinnerClient = ""
     private var ordersID: String = ""
     private var ordersSearched = Orders()
+    private var orderAndItemsCreated = mutableListOf<OrderAndItems>()
+
+    private val recycleViewAdapter by lazy {
+        OrdersItemRecycleView(this)
+    }
 
     private val binding by lazy {
         ActivityOrdersMgmtBinding.inflate(layoutInflater)
@@ -40,8 +42,14 @@ class OrdersMgmtActivity : AuthBaseActivity() {
     private val ordersDAO by lazy {
         DataSource.getDatabase(this).OrdersDAO()
     }
+    private val orderAndItemsDAO by lazy {
+        DataSource.getDatabase(this).OrderAndItemsDAO()
+    }
     private val ordersWebClient by lazy {
         OrdersWebClient()
+    }
+    private val orderAndItemsWebClient by lazy {
+        OrderAndItemsWebClient()
     }
     private val carDao by lazy {
         DataSource.getDatabase(this).CarDAO()
@@ -54,6 +62,14 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         )
     }
 
+    private val orderAndItemsRepository by lazy {
+        OrderAndItemsRepository(
+            orderAndItemsDAO,
+            orderAndItemsWebClient,
+            this.baseContext
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG, "onCreate - savedInstanceState: $savedInstanceState")
 
@@ -62,6 +78,8 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         binding.buttonAddItem.setOnClickListener {
             addItem()
         }
+
+        configRecyclerView()
 
         setSupportActionBar(binding.toolbar)
 
@@ -141,12 +159,15 @@ class OrdersMgmtActivity : AuthBaseActivity() {
                     id: Long
                 ) {
 
-                    selectedIdOnSpinner = group[position].id
+                    selectedIdOnSpinner = group[position].carId
+                    selectedIdOnSpinnerClient = group[position].userId
+
                     Log.i(TAG, "setGroupOnSpinner: $selectedIdOnSpinner")
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectedIdOnSpinner = group[0].id
+                    selectedIdOnSpinner = group[0].carId
+                    selectedIdOnSpinnerClient = group[0].userId
                 }
             }
         }
@@ -162,6 +183,7 @@ class OrdersMgmtActivity : AuthBaseActivity() {
 
             if (ordersID.isNotEmpty()) {
                 ordersRepository.delete(listOf(ordersID))
+                orderAndItemsRepository.deleteByOrderId(listOf(ordersID))
             }
 
             finish()
@@ -177,11 +199,13 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         if (ordersID.isEmpty()) {
             lifecycleScope.launch {
                 ordersRepository.insert(ordersCreated)
+                orderAndItemsRepository.insert(orderAndItemsCreated)
                 Log.i(TAG, "save - ordersCreated: $ordersCreated")
             }
         } else {
             lifecycleScope.launch {
                 ordersRepository.update(ordersCreated)
+                orderAndItemsRepository.update(orderAndItemsCreated)
                 Log.i(TAG, "save - ordersCreated: $ordersCreated")
             }
         }
@@ -209,10 +233,16 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         newOrders.updated = updateAt
 
         newOrders.carId = selectedIdOnSpinner
+        newOrders.userId = selectedIdOnSpinnerClient
 
         if (ordersID.isNotEmpty()) {
-            newOrders.id = ordersSearched.id
+            newOrders.orderId = ordersSearched.orderId
             newOrders.createdAt = ordersSearched.createdAt
+        }
+
+        if(orderAndItemsCreated.isNotEmpty())
+        {
+            orderAndItemsCreated.map { item -> item.orderId = newOrders.orderId }
         }
 
         return newOrders
@@ -243,5 +273,27 @@ class OrdersMgmtActivity : AuthBaseActivity() {
 
     private fun addItem() {
 
+        Log.i(TAG, "addItem")
+
+        val newOrderAndItems = createNewOrderAndItems()
+
+        orderAndItemsCreated.add(newOrderAndItems)
+
+        binding.textInputEditTextDescription.setText("")
+        binding.textInputEditTextQuantity.setText("")
+        binding.textInputEditTextPrice.setText("")
+
+        Log.i(TAG, "addItem - orderAndItemsCreated: $orderAndItemsCreated")
+        binding.recyclerView.visibility = View.VISIBLE
+        recycleViewAdapter.update(orderAndItemsCreated)
+    }
+
+
+    private fun configRecyclerView() {
+        binding.recyclerView.adapter = recycleViewAdapter
+        recycleViewAdapter.ordersItemOnClickEvent= { orderAndItems ->
+
+            orderAndItemsCreated.remove(orderAndItems)
+        }
     }
 }

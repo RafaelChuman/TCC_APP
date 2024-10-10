@@ -11,7 +11,7 @@ import java.util.UUID
     foreignKeys = [
         ForeignKey(
             entity = User::class,
-            parentColumns = ["id"],
+            parentColumns = ["userId"],
             childColumns = ["userId"],
             onDelete = ForeignKey.CASCADE
         )
@@ -20,7 +20,7 @@ import java.util.UUID
 class Car() {
 
     @PrimaryKey(autoGenerate = false)
-    var id: String = UUID.randomUUID().toString()
+    var carId: String = UUID.randomUUID().toString()
     var brand: String
     var model: String
     var kind: String
@@ -39,7 +39,7 @@ class Car() {
     var userId: String
 
     init {
-        id = UUID.randomUUID().toString();
+        carId = UUID.randomUUID().toString();
         brand = "";
         model = "";
         kind = "";
@@ -56,7 +56,7 @@ class Car() {
     }
 
     constructor(id: String, brand: String, model: String, kind: String, type: String, plate: String, yearOfFabrication: Int, yearOfModel: Int, color: String, createdAt: LocalDateTime, userId: String, deleted: Boolean, updated: LocalDateTime) : this() {
-        this.id =id
+        this.carId =id
         this.brand = brand
         this.model = model
         this.kind = kind
@@ -73,7 +73,7 @@ class Car() {
     }
 
     override fun toString(): String {
-        return ("$id - $model, $color, $plate, $userId")
+        return ("$carId - $model, $color, $plate, $userId")
     }
 }
 

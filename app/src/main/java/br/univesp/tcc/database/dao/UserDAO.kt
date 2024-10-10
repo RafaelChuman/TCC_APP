@@ -25,15 +25,19 @@ interface UserDao {
     ): User?
 
     @Query("""DELETE FROM User 
-                WHERE id IN (:userId)""")
-    suspend fun dellById(
+                WHERE userId IN (:userId)""")
+    suspend fun purgeById(
         userId: List<String>
     )
+
+    @Query("""UPDATE User SET deleted = 1 
+                WHERE userId IN (:userId)""")
+    suspend fun dellById(userId: List<String>)
 
     @Query("SELECT * FROM User WHERE userName = :userName")
     fun getByUserName(userName: String): Flow<List<User>>
 
-    @Query("SELECT * FROM User WHERE id = :userId")
+    @Query("SELECT * FROM User WHERE userId = :userId")
     fun getById(userId: List<String>): Flow<List<User>>
 
     @Query("SELECT * FROM User")

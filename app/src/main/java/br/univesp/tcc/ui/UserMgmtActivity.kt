@@ -160,7 +160,7 @@ class UserMgmtActivity : AuthBaseActivity() {
         user.updated = updatedAt
 
         if (userId.isNotEmpty()) {
-            user.id = userSearched.id
+            user.userId = userSearched.userId
             user.isAdmin = userSearched.isAdmin
             user.createdAt = userSearched.createdAt
         }

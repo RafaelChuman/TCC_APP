@@ -4,28 +4,29 @@ import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.database.model.Item
 import br.univesp.tcc.database.model.Orders
 import br.univesp.tcc.database.model.User
+import java.time.LocalDateTime
 import java.util.Date
 
 class DTOCreateOrderAndItems (
-    quantity: Int,
-    price: Int,
-    discount: Int,
-    item: Item,
-    orders: Orders,
+    val quantity: Int,
+    val price: Int,
+    val discount: Int,
+    val item: Item,
+    val orders: Orders,
 )
 class DTOListOrderAndItemsByOrder (
-    orderId: Orders,
-    dateBegin: Date,
-    dateEnd: Date,
+    val orderId: Orders,
+    val dateBegin: LocalDateTime,
+    val dateEnd: LocalDateTime,
 )
 
 class DTOListOrderAndItemsByUser (
-    userId: String,
-    dateBegin: Date,
-    dateEnd: Date,
+    val userId: String,
+    val dateBegin: LocalDateTime,
+    val dateEnd: LocalDateTime,
 )
 
 
 class DTODeleteOrderAndItems (
-    id: List<String>,
+    val id: List<String>,
 )

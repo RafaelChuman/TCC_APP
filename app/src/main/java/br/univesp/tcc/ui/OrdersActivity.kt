@@ -102,7 +102,7 @@ class OrdersActivity : Fragment() {
         recycleViewAdapter.ordersOnClickEvent = { orders ->
             val intent = Intent(requireActivity(), OrdersMgmtActivity::class.java)
 
-            intent.putExtra(ORDERS_ID, orders.id)
+            intent.putExtra(ORDERS_ID, orders.orderId)
             startActivity(intent)
         }
     }

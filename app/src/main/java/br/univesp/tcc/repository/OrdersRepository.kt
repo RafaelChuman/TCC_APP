@@ -7,6 +7,7 @@ import br.univesp.tcc.database.dao.OrdersDAO
 import br.univesp.tcc.database.dao.UserDao
 import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.database.model.Orders
+import br.univesp.tcc.database.model.OrdersCarUser
 import br.univesp.tcc.database.model.User
 import br.univesp.tcc.extensions.dataStore
 import br.univesp.tcc.extensions.tokenDataStore
@@ -37,7 +38,7 @@ class OrdersRepository(
         return userToken
     }
 
-    suspend fun getOrders(): List<Orders>? {
+    suspend fun getOrders(): List<OrdersCarUser>? {
 
         syncOrders()
 
@@ -55,11 +56,11 @@ class OrdersRepository(
         val userToken = getToken()
 
         val ordersWeb = ordersWebClient.listAll(userToken) ?: listOf<Orders>()
-        val orders = ordersDao.getAll().firstOrNull() ?: listOf<Orders>()
+        val orders = ordersDao.getAll().firstOrNull() ?: listOf<OrdersCarUser>()
         val updList: MutableList<Orders> = mutableListOf<Orders>()
 
         for (ord in ordersWeb) {
-            val updOrders = orders.find { item -> item.id == ord.id }
+            val updOrders = orders.find { item -> item.orderId == ord.orderId }
             if (updOrders == null || updOrders.updated < ord.updated) {
                 updList.add(ord)
             }
@@ -83,9 +84,9 @@ class OrdersRepository(
 
         ordersDao.save(listOf(newOrders))
 
-        val userInserted = ordersWebClient.create(userToken, newOrders)
-
-        Log.i(TAG, "insert - userInserted: $userInserted")
+//        val userInserted = ordersWebClient.create(userToken, newOrders)
+//
+//        Log.i(TAG, "insert - userInserted: $userInserted")
     }
 
     suspend fun update(updateOrders: Orders) {
@@ -93,7 +94,7 @@ class OrdersRepository(
         Log.i(TAG, "update - updateOrders: $updateOrders")
         val userToken = getToken()
 
-        val ordersSearched = ordersDao.getById(listOf(updateOrders.id)).firstOrNull()
+        val ordersSearched = ordersDao.getById(listOf(updateOrders.orderId)).firstOrNull()
 
         if (ordersSearched.isNullOrEmpty()) return
 

@@ -6,24 +6,25 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.univesp.tcc.database.model.Orders
+import br.univesp.tcc.database.model.OrdersCarUser
 import br.univesp.tcc.databinding.RecyclerviewOrderBinding
 
 private const val TAG = "OrderRecycleView"
 
 class OrdersRecycleView(
     private val context: Context,
-    var ordersOnClickEvent: (orders: Orders) -> Unit = {},
-    ordersList: List<Orders> = emptyList()
+    var ordersOnClickEvent: (orders: OrdersCarUser) -> Unit = {},
+    ordersList: List<OrdersCarUser> = emptyList()
 ) : RecyclerView.Adapter<OrdersRecycleView.ViewHolder>() {
 
     private val orders = ordersList.toMutableList()
 
     inner class ViewHolder(
         private val binding: RecyclerviewOrderBinding,
-        private val ordersOnClickEvent: (orders: Orders) -> Unit
+        private val ordersOnClickEvent: (orders: OrdersCarUser) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private lateinit var orders: Orders
+        private lateinit var orders: OrdersCarUser
 
         init {
             itemView.setOnClickListener {
@@ -33,12 +34,12 @@ class OrdersRecycleView(
             }
         }
 
-        fun associateOrder(ord: Orders) {
+        fun associateOrder(ord: OrdersCarUser) {
             Log.i(TAG, "associateUser - ord: $ord")
 
             this.orders = ord
 
-            val id = ord.id
+            val id = ord.orderId
             val createdAt = ord.createdAt
             val carId = ord.carId
             val userId = ord.userId
@@ -46,11 +47,11 @@ class OrdersRecycleView(
 
             binding.textViewId.text = id
             binding.textViewCreatedAt.text = createdAt.toString()
-            binding.textViewCarColor.text = carId
-            binding.textViewCarModel.text = carId
-            binding.textViewCarPlate.text = carId
-            binding.textViewUserName.text = userId
-            binding.textViewUserCellphone.text = userId
+            binding.textViewCarColor.text = ord.color
+            binding.textViewCarModel.text = ord.model
+            binding.textViewCarPlate.text = ord.plate
+            binding.textViewUserName.text = ord.name
+            binding.textViewUserCellphone.text = ord.cellphone
         }
     }
 
@@ -77,7 +78,7 @@ class OrdersRecycleView(
         return orders.size
     }
 
-    fun update(newOrders: List<Orders>) {
+    fun update(newOrders: List<OrdersCarUser>) {
         Log.i(TAG, "update - this.user.size: ${this.orders.size}")
         notifyItemRangeRemoved(0, this.orders.size)
         this.orders.clear()

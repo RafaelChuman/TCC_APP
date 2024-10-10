@@ -11,7 +11,7 @@ import java.util.UUID
     foreignKeys = [
         ForeignKey(
             entity = Orders::class,
-            parentColumns = ["id"],
+            parentColumns = ["orderId"],
             childColumns = ["orderId"],
             onDelete = ForeignKey.CASCADE
         )
