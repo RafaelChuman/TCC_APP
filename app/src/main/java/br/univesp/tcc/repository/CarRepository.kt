@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo
 import br.univesp.tcc.database.dao.CarDAO
 import br.univesp.tcc.database.dao.UserDao
 import br.univesp.tcc.database.model.Car
+import br.univesp.tcc.database.model.CarUser
 import br.univesp.tcc.database.model.User
 import br.univesp.tcc.extensions.dataStore
 import br.univesp.tcc.extensions.tokenDataStore
@@ -54,11 +55,11 @@ class CarRepository(
         return car
     }
 
-    suspend fun getAll(): List<Car>? {
+    suspend fun getAll(): List<CarUser>? {
 
         syncCar()
 
-        val car = carDAO.getAll().firstOrNull()
+        val car = carDAO.getAllCarWithUser().firstOrNull()
 
         Log.i(TAG, "getCarById - car: $car")
 

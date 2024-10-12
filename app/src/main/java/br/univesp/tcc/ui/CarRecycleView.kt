@@ -6,24 +6,25 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.univesp.tcc.database.model.Car
+import br.univesp.tcc.database.model.CarUser
 import br.univesp.tcc.databinding.RecyclerviewCarBinding
 
 private const val TAG = "CarRecycleView"
 
 class CarRecycleView(
     private val context: Context,
-    var carOnClickEvent: (car: Car) -> Unit = {},
-    carList: List<Car> = emptyList()
+    var carOnClickEvent: (car: CarUser) -> Unit = {},
+    carList: List<CarUser> = emptyList()
 ) : RecyclerView.Adapter<CarRecycleView.ViewHolder>() {
 
     private val cars = carList.toMutableList()
 
     inner class ViewHolder(
         private val binding: RecyclerviewCarBinding,
-        private val carOnClickEvent: (car: Car) -> Unit
+        private val carOnClickEvent: (car: CarUser) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private lateinit var car: Car
+        private lateinit var car: CarUser
 
         init {
             itemView.setOnClickListener {
@@ -33,7 +34,7 @@ class CarRecycleView(
             }
         }
 
-        fun associateItem(item: Car) {
+        fun associateItem(item: CarUser) {
             Log.i(TAG, "associateItem: $item")
 
             this.car = item
@@ -56,7 +57,7 @@ class CarRecycleView(
             color.text = item.color
             yearOfFabrication.text = item.yearOfFabrication.toString()
             yearOfModel.text = item.yearOfModel.toString()
-            userName.text = item.userId
+            userName.text = item.name
 
         }
     }
@@ -78,7 +79,7 @@ class CarRecycleView(
 
     override fun getItemCount(): Int = cars.size
 
-    fun update(newItems: List<Car>) {
+    fun update(newItems: List<CarUser>) {
         notifyItemRangeRemoved(0, this.cars.size)
         this.cars.clear()
         this.cars.addAll(newItems)

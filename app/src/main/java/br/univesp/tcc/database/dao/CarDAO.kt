@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RewriteQueriesToDropUnusedColumns
 import br.univesp.tcc.database.model.Car
+import br.univesp.tcc.database.model.CarUser
 import br.univesp.tcc.webclient.model.DTOListCarById
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +24,15 @@ interface CarDAO {
 
     @Query("""SELECT * FROM Car  """) // WHERE Car.deleted = 0 """)
     fun getAll(): Flow<List<Car>>
+
+    @Query("""SELECT Car.carId AS carId, Car.brand AS brand, Car.model AS model, Car.kind AS kind, Car.type AS type, 
+                        Car.plate AS plate, Car.yearOfFabrication AS yearOfFabrication, Car.yearOfModel AS yearOfModel,
+                        Car.color AS color, Car.createdAt AS createdAt, Car.deleted AS deleted, Car.updated AS updated, 
+                        User.userId AS userId, User.name As name, User.cellphone As cellphone
+        FROM Car 
+        INNER JOIN User ON Car.userId = User.userId 
+        WHERE Car.deleted = 0 """)
+    fun getAllCarWithUser(): Flow<List<CarUser>>
 
     @Query(
         """

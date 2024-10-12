@@ -78,9 +78,54 @@ class Car() {
 }
 
 
+
+class CarUser(){
+    var carId: String = UUID.randomUUID().toString()
+    var brand: String
+    var model: String
+    var kind: String
+    var type: String
+    var plate: String
+    var yearOfFabrication: Int
+    var yearOfModel: Int
+    var color: String
+    var createdAt: LocalDateTime
+    var deleted: Boolean
+    var updated: LocalDateTime
+
+    var userId: String
+    var name: String
+    var cellphone: String
+
+    init {
+        carId = UUID.randomUUID().toString();
+        brand = "";
+        model = "";
+        kind = "";
+        type = "";
+        plate = "";
+        yearOfFabrication = 0;
+        yearOfModel = 0;
+        color = "";
+        createdAt = LocalDateTime.now();
+        deleted = false;
+        updated = LocalDateTime.now();
+
+        userId = "";
+        name = "";
+        cellphone = "";
+
+    }
+
+    override fun toString(): String {
+        return ("${carId} - ${model}, ${plate}")
+    }
+}
+
 //data class IoT_GroupIoT(
 //    @Embedded val ioT: IoT,
 //    @Relation(parentColumn = "groupId", entityColumn = "id")
 //    val groupIoT: GroupIoT
 //
 //)
+
