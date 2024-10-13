@@ -55,7 +55,7 @@ class Orders(){
     }
 
     override fun toString(): String {
-    return ("$orderId - $userId, $carId")
+    return ("$orderId $km $deleted")
     }
 }
 
@@ -99,6 +99,6 @@ class OrdersCarUser(){
     }
 
     override fun toString(): String {
-        return ("${orderId} - ${name}, ${plate}")
+        return ("${orderId} ${name} ${plate}")
     }
 }

@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RewriteQueriesToDropUnusedColumns
+import androidx.room.Update
 import br.univesp.tcc.database.model.OrderAndItems
 import br.univesp.tcc.webclient.model.DTOListOrderAndItemsByUser
 import kotlinx.coroutines.flow.Flow
@@ -13,8 +14,11 @@ import java.time.LocalDateTime
 @Dao
 interface OrderAndItemsDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(orderAndItems: List<OrderAndItems>)
+    @Insert()
+    suspend fun insert(orderAndItems: List<OrderAndItems>)
+
+    @Update()
+    suspend fun update(orderAndItems: List<OrderAndItems>): Int
 
     @RewriteQueriesToDropUnusedColumns
     @Query("""SELECT OrderAndItems.id, OrderAndItems.orderId, OrderAndItems.type, OrderAndItems.name, OrderAndItems.unitMeasurement, OrderAndItems.quantity, OrderAndItems.price, OrderAndItems.discount, OrderAndItems.createdAt, OrderAndItems.deleted, OrderAndItems.updated, Orders.userId 

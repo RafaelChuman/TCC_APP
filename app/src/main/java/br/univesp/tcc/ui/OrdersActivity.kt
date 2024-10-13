@@ -58,6 +58,10 @@ class OrdersActivity : Fragment() {
 
         configRecyclerView()
 
+        lifecycleScope.launch {
+                ordersRepository.syncOrders()
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 getAllOrder()

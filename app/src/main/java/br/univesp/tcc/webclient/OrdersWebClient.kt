@@ -67,7 +67,7 @@ class OrdersWebClient {
     suspend fun update(userToken: String, data: Orders): Orders?
     {
         try {
-            val listResp = ordersService.update(userToken, data)
+            val listResp = ordersService.update(userToken, listOf(data))
 
             return listResp.body()
         } catch (e: Exception) {

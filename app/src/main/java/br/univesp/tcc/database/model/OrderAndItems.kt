@@ -59,6 +59,6 @@ class OrderAndItems() {
     }
 
     override fun toString(): String {
-        return ("$id - $orderId, $name")
+        return ("$name , $price")
     }
 }

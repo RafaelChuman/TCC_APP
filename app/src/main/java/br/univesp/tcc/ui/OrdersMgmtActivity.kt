@@ -188,14 +188,13 @@ class OrdersMgmtActivity : AuthBaseActivity() {
 
 
     private fun remove() {
-        Log.i(TAG, "remove - ordersID: $ordersID")
+        Log.i(TAG, "remove")
 
         lifecycleScope.launch {
+            Log.i(TAG, "remove - ordersID: $ordersID")
 
-            if (ordersID.isNotEmpty()) {
-                ordersRepository.delete(listOf(ordersID))
-                orderAndItemsRepository.deleteByOrderId(listOf(ordersID))
-            }
+            orderAndItemsRepository.purgeByOrderId(listOf(ordersID))
+            ordersRepository.delete(listOf(ordersID))
 
             finish()
         }
@@ -217,7 +216,7 @@ class OrdersMgmtActivity : AuthBaseActivity() {
             lifecycleScope.launch {
                 ordersRepository.update(ordersCreated)
                 orderAndItemsRepository.update(orderAndItemsCreated)
-                Log.i(TAG, "save - ordersCreated: $ordersCreated")
+                Log.i(TAG, "save - ordersUpdated: $ordersCreated")
             }
         }
         finish()
@@ -310,7 +309,11 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         binding.recyclerView.adapter = recycleViewAdapter
         recycleViewAdapter.ordersItemOnClickEvent= { orderAndItems ->
 
+            Log.i(TAG, "configRecyclerView - orderAndItems: $orderAndItems")
+            val position = orderAndItemsCreated.indexOf(orderAndItems)
             orderAndItemsCreated.remove(orderAndItems)
+            recycleViewAdapter.update(orderAndItemsCreated)
+            Log.i(TAG, "configRecyclerView - orderAndItemsCreated: $orderAndItemsCreated")
         }
     }
 }

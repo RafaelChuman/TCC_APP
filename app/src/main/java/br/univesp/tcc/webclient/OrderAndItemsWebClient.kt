@@ -2,10 +2,9 @@ package br.univesp.tcc.webclient
 
 import android.util.Log
 import br.univesp.tcc.database.model.OrderAndItems
-import br.univesp.tcc.webclient.model.DTOCreateOrderAndItems
-import br.univesp.tcc.webclient.model.DTODeleteOrderAndItems
+import br.univesp.tcc.webclient.model.DTODeleteOrderAndItemsById
+import br.univesp.tcc.webclient.model.DTODeleteOrderAndItemsByOrderId
 import br.univesp.tcc.webclient.model.DTOListOrderAndItemsByOrder
-import br.univesp.tcc.webclient.model.DTOListOrderAndItemsByUser
 
 private const val TAG = "OrderAndItemsWebClient"
 
@@ -49,10 +48,10 @@ class OrderAndItemsWebClient {
         return null
     }
 
-    suspend fun create(userToken: String, orderAndItems: List<OrderAndItems>): OrderAndItems?
+    suspend fun save(userToken: String, orderAndItems: List<OrderAndItems>): List<OrderAndItems>?
     {
         try {
-            val listResp = orderAndItemsService.create(userToken, orderAndItems)
+            val listResp = orderAndItemsService.save(userToken, orderAndItems)
 
             return listResp.body()
         } catch (e: Exception) {
@@ -62,14 +61,35 @@ class OrderAndItemsWebClient {
     }
 
 
-    suspend fun delete(userToken: String, data: DTODeleteOrderAndItems): OrderAndItems?
+    suspend fun purgeById(userToken: String, id: List<String>): List<OrderAndItems>?
     {
         try {
-            val listResp = orderAndItemsService.delete(userToken, data)
+            val data = DTODeleteOrderAndItemsById(
+                id = id
+            )
+
+            val listResp = orderAndItemsService.purgeById(userToken, data)
 
             return listResp.body()
         } catch (e: Exception) {
-            Log.e(TAG, "delete - error: ", e)
+            Log.e(TAG, "purgeById - error: ", e)
+        }
+        return null
+    }
+
+    suspend fun purgeByOrderId(userToken: String, orderId: List<String>): List<OrderAndItems>?
+    {
+        try {
+
+            val data = DTODeleteOrderAndItemsByOrderId(
+                orderId = orderId
+            )
+
+            val listResp = orderAndItemsService.purgeByOrderId(userToken, data)
+
+            return listResp.body()
+        } catch (e: Exception) {
+            Log.e(TAG, "purgeByOrderId - error: ", e)
         }
         return null
     }

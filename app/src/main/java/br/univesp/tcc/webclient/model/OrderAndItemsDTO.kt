@@ -27,6 +27,10 @@ class DTOListOrderAndItemsByUser (
 )
 
 
-class DTODeleteOrderAndItems (
+class DTODeleteOrderAndItemsByOrderId (
+    val orderId: List<String>,
+)
+
+class DTODeleteOrderAndItemsById (
     val id: List<String>,
 )

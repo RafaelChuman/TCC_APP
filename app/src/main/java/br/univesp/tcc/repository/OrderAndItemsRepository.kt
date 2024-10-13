@@ -4,13 +4,15 @@ import android.content.Context
 import android.util.Log
 import br.univesp.tcc.database.dao.OrderAndItemsDAO
 import br.univesp.tcc.database.model.OrderAndItems
+import br.univesp.tcc.database.model.Orders
+import br.univesp.tcc.database.model.OrdersCarUser
 import br.univesp.tcc.extensions.dataStore
 import br.univesp.tcc.extensions.tokenDataStore
 import br.univesp.tcc.webclient.OrderAndItemsWebClient
 import br.univesp.tcc.webclient.model.DTODeleteOrders
 import kotlinx.coroutines.flow.firstOrNull
 
-private const val TAG = "OrderItemsRepository"
+private const val TAG = "OrderAndItemsRepository"
 
 class OrderAndItemsRepository(
     private val orderItemsDao: OrderAndItemsDAO,
@@ -52,27 +54,36 @@ class OrderAndItemsRepository(
         val orderAndItemsWeb = orderItemsWebClient.getAll(userToken) ?: listOf<OrderAndItems>()
         val orderAndItemsDAO = orderItemsDao.getAll()?.firstOrNull() ?: listOf<OrderAndItems>()
         val updList: MutableList<OrderAndItems> = mutableListOf<OrderAndItems>()
+        val addList: MutableList<OrderAndItems> = mutableListOf<OrderAndItems>()
         val dltList: MutableList<String> = mutableListOf<String>()
 
         Log.i(TAG, "syncOrderAndItems - orderAndItemsWeb: $orderAndItemsWeb")
+        Log.i(TAG, "syncOrderAndItems - orderAndItemsDAO: $orderAndItemsDAO")
 
-        for (ord in orderAndItemsWeb) {
-            val updOrderAndItems = orderAndItemsDAO.find { item -> item.id == ord.id }
-            if (updOrderAndItems == null || updOrderAndItems.updated < ord.updated) {
-                updList.add(ord)
-            }
+        for (ordItmWeb in orderAndItemsWeb) {
+            val ordDAO = orderAndItemsDAO.find { dao -> dao.id == ordItmWeb.id }
+
+            val needToInsert = (ordDAO == null)
+            val needToUpdate = ((ordDAO != null) && (ordDAO.updated < ordItmWeb.updated))
+
+            if (needToInsert) addList.add(ordItmWeb)
+
+            if(needToUpdate) updList.add(ordItmWeb)
         }
+
+        for (ordItmDAO in orderAndItemsDAO) {
+            val ordWeb = orderAndItemsWeb.find { web -> web.id == ordItmDAO.id }
+
+            val needToDelete = (ordWeb == null)
+
+            if (needToDelete) dltList.add(ordItmDAO.id)
+        }
+
+        Log.i(TAG, "syncOrderAndItems - addList: $addList")
+        if (addList.isNotEmpty()) orderItemsDao.insert(addList)
 
         Log.i(TAG, "syncOrderAndItems - updList: $updList")
-        if (updList.isNotEmpty()) orderItemsDao.save(updList)
-
-        for (ord in orderAndItemsDAO) {
-            val updOrdAndItems = orderAndItemsWeb.find { web -> web.id == ord.id }
-            Log.i(TAG, "syncOrderAndItems - dltList  orderAndItemsWeb: ${updOrdAndItems?.updated.toString()} == orderAndItemsDAO: ${ord.updated.toString()}")
-            if (updOrdAndItems == null){  // ||  updCar.updated < carSqlite.updated) {
-                dltList.add(ord.orderId)
-            }
-        }
+        if (updList.isNotEmpty()) orderItemsDao.update(updList)
 
         Log.i(TAG, "syncOrderAndItems - dltList: $dltList")
         if (dltList.isNotEmpty())  orderItemsDao.purgeByID(dltList)
@@ -84,91 +95,92 @@ class OrderAndItemsRepository(
         return orderItemsDao.getByID(listOf(id))?.firstOrNull()
     }
 
-
     suspend fun insert(newOrderAndItems:  List<OrderAndItems>) {
 
-        Log.i(TAG, "insert - newOrderAndItems: $newOrderAndItems")
+        if(newOrderAndItems.isEmpty()) return
+
+        Log.i(TAG, "save - newOrderAndItems: $newOrderAndItems")
         val userToken = getToken()
 
-        orderItemsDao.save(newOrderAndItems)
+        orderItemsDao.insert(newOrderAndItems)
 
-        val userInserted = orderItemsWebClient.create(userToken, newOrderAndItems)
-
-        Log.i(TAG, "insert - userInserted: $userInserted")
+        val orderAndItemsInserted = orderItemsWebClient.save(userToken, newOrderAndItems)
+        Log.i(TAG, "save - orderAndItemsInserted: $orderAndItemsInserted")
     }
 
-    suspend fun update(updateOrderAndItems: List<OrderAndItems>) {
 
-        Log.i(TAG, "update - updateOrderAndItems: $updateOrderAndItems")
-        val userToken = getToken()
+    suspend fun update(orderAndItemsUpdate: List<OrderAndItems>) {
+
+        Log.i(TAG, "update - orderAndItemsUpdate: $orderAndItemsUpdate")
+        val addList: MutableList<OrderAndItems> = mutableListOf<OrderAndItems>()
         val updList: MutableList<OrderAndItems> = mutableListOf<OrderAndItems>()
-        val delList: MutableList<OrderAndItems> = mutableListOf<OrderAndItems>()
+        val delList: MutableList<String> = mutableListOf<String>()
 
-        if(updateOrderAndItems.isEmpty()) return
+        if(orderAndItemsUpdate.isEmpty()) return
 
-        val orderID = updateOrderAndItems[0].orderId ?: ""
+        val orderID = orderAndItemsUpdate[0].orderId ?: ""
+        Log.i(TAG, "update - orderID: $orderID")
 
-        val ordersSearched = orderItemsDao.getByOrderID(orderID)?.firstOrNull() ?: listOf<OrderAndItems>()
+        val orderAndItemsDAO= orderItemsDao.getByOrderID(orderID)?.firstOrNull() ?: listOf<OrderAndItems>()
+        Log.i(TAG, "update - orderAndItemsDAO: $orderAndItemsDAO")
 
-        for (ord in updateOrderAndItems) {
-            val updItem = ordersSearched.find { item -> item.id == ord.id }
+        if(orderAndItemsDAO.isEmpty()) return
 
-            if (updItem == null)
+        for (ordItmUpd in orderAndItemsUpdate) {
+            val ordItmDAO = orderAndItemsDAO.find { dao -> dao.id == ordItmUpd.id }
+
+            if (ordItmDAO == null)
             {
-                delList.add(ord)
+                addList.add(ordItmUpd)
                 break
             }
-            if (updItem.updated < ord.updated) {
-                updList.add(ord)
+
+            if (ordItmDAO.updated < ordItmUpd.updated) {
+                updList.add(ordItmUpd)
             }
         }
 
-        if(delList.isNotEmpty())
-        {
-            delete(delList.map { item -> item.id })
+        for (ordItmDAO in orderAndItemsDAO) {
+            val  ordItmUpd = orderAndItemsUpdate.find { upd -> upd.id == ordItmDAO.id }
+
+            if (ordItmUpd == null) delList.add(ordItmDAO.id)
         }
 
-        if(updList.isNotEmpty())
-        {
-            orderItemsDao.save(updList)
+        purgeById(delList)
 
-            //val ordersUpdated = orderItemsWebClient.update(userToken, updList)
-            //Log.i(TAG, "update - ordersUpdated: $ordersUpdated")
-        }
-    }
+        insert(addList)
 
-    suspend fun delete(idList: List<String>) {
-
-        if (idList.isNotEmpty()) return
-
-        val userToken = getToken()
-
-        val data = DTODeleteOrders(
-            id = idList
-        )
-
-        orderItemsDao.purgeByID(data.id)
-
-        //val ordersDeleted = orderItemsWebClient.delByID(userToken, data)
-        //Log.i(TAG, "update - ordersDeleted: $ordersDeleted")
+        if (updList.isNotEmpty()) orderItemsDao.update(updList)
 
     }
 
+    private suspend fun purgeById(idList: List<String>) {
 
-    suspend fun deleteByOrderId(orderIdList: List<String>) {
-
-        if (orderIdList.isNotEmpty()) return
+        if (idList.isEmpty()) return
+        Log.i(TAG, "delete - idList: $idList")
 
         val userToken = getToken()
 
-        val data = DTODeleteOrders(
-            id = orderIdList
-        )
 
-        orderItemsDao.purgeByOrderID(data.id)
 
-        //val ordersDeleted = orderItemsWebClient.delByID(userToken, data)
-        //Log.i(TAG, "update - ordersDeleted: $ordersDeleted")
+        orderItemsDao.purgeByID(idList)
 
+        val ordersDeleted = orderItemsWebClient.purgeById(userToken, idList)
+        Log.i(TAG, "delete - ordersDeleted: $ordersDeleted")
+    }
+
+
+    suspend fun purgeByOrderId(orderIdList: List<String>) {
+
+        Log.i(TAG, "purgeByOrderId")
+        if (orderIdList.isEmpty()) return
+
+        val userToken = getToken()
+
+        Log.i(TAG, "purgeByOrderId - orderIdList: $orderIdList")
+        orderItemsDao.purgeByOrderID(orderIdList)
+
+        val ordersDeleted = orderItemsWebClient.purgeByOrderId(userToken, orderIdList)
+        Log.i(TAG, "purgeByOrderId - ordersDeleted: $ordersDeleted")
     }
 }

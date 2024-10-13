@@ -27,11 +27,11 @@ interface OrdersService {
     @GET("orders")
     suspend fun listByCar(@Header("Authorization") token: String, @Body plate: String) : Response<List<Orders>>
 
-    @HTTP(method = "DELETE", path = "user", hasBody = true)
+    @HTTP(method = "DELETE", path = "orders", hasBody = true)
     suspend fun delete(@Header("Authorization") token: String, @Body data: DTODeleteOrders): Response<Orders>
 
     @PUT("orders")
-    suspend fun  update(@Header("Authorization") token: String, @Body data: Orders): Response<Orders>
+    suspend fun  update(@Header("Authorization") token: String, @Body data: List<Orders>): Response<Orders>
 
     @GET("orders")
     suspend fun listAll(@Header("Authorization") token: String):  Response<List<Orders>>

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import br.univesp.tcc.database.model.Orders
 import br.univesp.tcc.database.model.OrdersCarUser
 import kotlinx.coroutines.flow.Flow
@@ -11,8 +12,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface OrdersDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save(order: List<Orders>)
+    @Insert()
+    suspend fun insert(order: List<Orders>)
+
+    @Update
+    suspend fun update(order: List<Orders>): Int
 
     @Query("""SELECT * FROM Orders
             WHERE userId = :userId 
