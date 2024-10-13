@@ -19,7 +19,7 @@ import retrofit2.http.PUT
 interface OrdersService {
 
     @POST("orders")
-    suspend fun create(@Header("Authorization") token: String, @Body data: Orders): Response<Orders>
+    suspend fun create(@Header("Authorization") token: String, @Body data: List<Orders>): Response<Orders>
 
     @GET("orders")
     suspend fun listByUser(@Header("Authorization") token: String, @Body userId: String) : Response<List<Orders>>

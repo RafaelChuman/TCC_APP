@@ -37,6 +37,9 @@ interface OrdersDAO {
     @Query("UPDATE Orders set deleted = 1 WHERE orderId IN (:orderId)")
     suspend fun remove(orderId: List<String>)
 
+    @Query("DELETE FROM Orders WHERE orderId IN (:orderId)")
+    suspend fun purge(orderId: List<String>)
+
     @Query("UPDATE Orders set statusOrder = 1 WHERE orderId = :orderId")
     suspend fun setDone(orderId: String)
 

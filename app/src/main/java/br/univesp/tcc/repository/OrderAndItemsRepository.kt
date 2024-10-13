@@ -34,9 +34,9 @@ class OrderAndItemsRepository(
 
         syncOrderAndItems()
 
-        val userToken = getToken()
+        //val userToken = getToken()
 
-        val orderAndItems = orderItemsDao.getByUserID(userToken)?.firstOrNull() ?: listOf<OrderAndItems>()
+        val orderAndItems = orderItemsDao.getByOrderID(orderId)?.firstOrNull() ?: listOf<OrderAndItems>()
 
         Log.i(TAG, "getOrderItems - orderAndItems: $orderAndItems")
 
@@ -49,9 +49,12 @@ class OrderAndItemsRepository(
 
         val userToken = getToken()
 
-        val orderAndItemsWeb = orderItemsWebClient.listByUser(userToken) ?: listOf<OrderAndItems>()
-        val orderAndItemsDAO = orderItemsDao.getByUserID(userToken)?.firstOrNull() ?: listOf<OrderAndItems>()
+        val orderAndItemsWeb = orderItemsWebClient.getAll(userToken) ?: listOf<OrderAndItems>()
+        val orderAndItemsDAO = orderItemsDao.getAll()?.firstOrNull() ?: listOf<OrderAndItems>()
         val updList: MutableList<OrderAndItems> = mutableListOf<OrderAndItems>()
+        val dltList: MutableList<String> = mutableListOf<String>()
+
+        Log.i(TAG, "syncOrderAndItems - orderAndItemsWeb: $orderAndItemsWeb")
 
         for (ord in orderAndItemsWeb) {
             val updOrderAndItems = orderAndItemsDAO.find { item -> item.id == ord.id }
@@ -62,6 +65,17 @@ class OrderAndItemsRepository(
 
         Log.i(TAG, "syncOrderAndItems - updList: $updList")
         if (updList.isNotEmpty()) orderItemsDao.save(updList)
+
+        for (ord in orderAndItemsDAO) {
+            val updOrdAndItems = orderAndItemsWeb.find { web -> web.id == ord.id }
+            Log.i(TAG, "syncOrderAndItems - dltList  orderAndItemsWeb: ${updOrdAndItems?.updated.toString()} == orderAndItemsDAO: ${ord.updated.toString()}")
+            if (updOrdAndItems == null){  // ||  updCar.updated < carSqlite.updated) {
+                dltList.add(ord.orderId)
+            }
+        }
+
+        Log.i(TAG, "syncOrderAndItems - dltList: $dltList")
+        if (dltList.isNotEmpty())  orderItemsDao.purgeByID(dltList)
     }
 
     suspend  fun getById(id: String): List<OrderAndItems>? {
@@ -78,9 +92,9 @@ class OrderAndItemsRepository(
 
         orderItemsDao.save(newOrderAndItems)
 
-//        val userInserted = ordersWebClient.create(userToken, newOrders)
-//
-//        Log.i(TAG, "insert - userInserted: $userInserted")
+        val userInserted = orderItemsWebClient.create(userToken, newOrderAndItems)
+
+        Log.i(TAG, "insert - userInserted: $userInserted")
     }
 
     suspend fun update(updateOrderAndItems: List<OrderAndItems>) {

@@ -52,15 +52,14 @@ class OrdersWebClient {
         return null
     }
 
-    suspend fun create(userToken: String, data: Orders): Orders?
+    suspend fun create(userToken: String, orders: List<Orders>): Orders?
     {
         try {
-            val listResp = ordersService.create(userToken, data)
+            val listResp = ordersService.create(userToken, orders)
 
             return listResp.body()
         } catch (e: Exception) {
             Log.e(TAG, "create - Error: ", e)
-
         }
         return null
     }

@@ -26,6 +26,14 @@ interface OrderAndItemsDAO {
     """)
     fun getByUserID(userId: String
     ): Flow<List<OrderAndItems>>?
+
+
+    @RewriteQueriesToDropUnusedColumns
+    @Query("""SELECT * 
+            FROM OrderAndItems
+            WHERE deleted = 0
+    """)
+    fun getAll(): Flow<List<OrderAndItems>>?
 //    AND Orders.createdAt BETWEEN :dateBegin AND :dateEnd
 
     @RewriteQueriesToDropUnusedColumns
@@ -53,5 +61,6 @@ interface OrderAndItemsDAO {
 
     @Query("DELETE FROM OrderAndItems WHERE orderId IN (:orderID) ")
     suspend fun purgeByOrderID(orderID: List<String>)
+
 }
 

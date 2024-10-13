@@ -137,6 +137,17 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         binding.textInputEditTextStatusExecution.setText(ordersSearched.statusExecution.toString())
         binding.textInputEditTextStatusOrder.setText(ordersSearched.statusOrder.toString())
 
+        //Procedure to Get All Items from Order and Sync With the mais Val OrderList
+        //The main val is used to sync the recycleView of Items
+        val orderAndItemsList = orderAndItemsRepository.getOrderItems(ordersID)
+
+        if (orderAndItemsList.isNullOrEmpty()) return
+
+        orderAndItemsCreated.addAll(orderAndItemsList)
+        Log.i(TAG, "addItem - orderAndItemsCreated: $orderAndItemsCreated")
+
+        binding.recyclerView.visibility = View.VISIBLE
+        recycleViewAdapter.update(orderAndItemsCreated)
     }
 
     private suspend fun setCarOnSpinner() {
@@ -238,6 +249,7 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         if (ordersID.isNotEmpty()) {
             newOrders.orderId = ordersSearched.orderId
             newOrders.createdAt = ordersSearched.createdAt
+            newOrders.statusExecution = "Aberta"
         }
 
         if(orderAndItemsCreated.isNotEmpty())
@@ -266,6 +278,11 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         newOrderAndItems.discount = 0.0
         newOrderAndItems.quantity = quantity.toInt()
         newOrderAndItems.unitMeasurement = ""
+
+        if (ordersID.isNotEmpty())
+        {
+            newOrderAndItems.orderId = ordersID
+        }
 
         return newOrderAndItems
     }

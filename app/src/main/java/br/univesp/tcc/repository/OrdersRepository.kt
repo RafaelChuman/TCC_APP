@@ -56,11 +56,12 @@ class OrdersRepository(
         val userToken = getToken()
 
         val ordersWeb = ordersWebClient.listAll(userToken) ?: listOf<Orders>()
-        val orders = ordersDao.getAll().firstOrNull() ?: listOf<OrdersCarUser>()
+        val ordersDAO = ordersDao.getAll().firstOrNull() ?: listOf<OrdersCarUser>()
         val updList: MutableList<Orders> = mutableListOf<Orders>()
+        val dltList: MutableList<String> = mutableListOf<String>()
 
         for (ord in ordersWeb) {
-            val updOrders = orders.find { item -> item.orderId == ord.orderId }
+            val updOrders = ordersDAO.find { item -> item.orderId == ord.orderId }
             if (updOrders == null || updOrders.updated < ord.updated) {
                 updList.add(ord)
             }
@@ -68,6 +69,17 @@ class OrdersRepository(
 
         Log.i(TAG, "syncOrders - updList: $updList")
         if (updList.isNotEmpty()) ordersDao.save(updList)
+
+        for (ord in ordersDAO) {
+            val updOrders = ordersWeb.find { web -> web.orderId == ord.orderId }
+            Log.i(TAG, "syncOrders - dltList  ordersWeb: ${updOrders?.updated.toString()} == ordersDAO: ${ord.updated.toString()}")
+            if (updOrders == null){  // ||  updCar.updated < carSqlite.updated) {
+                dltList.add(ord.orderId)
+            }
+        }
+
+        Log.i(TAG, "syncOrders - dltList: $dltList")
+        if (dltList.isNotEmpty())  ordersDao.purge(dltList)
     }
 
     suspend  fun getById(id: String): List<Orders>? {
@@ -84,9 +96,9 @@ class OrdersRepository(
 
         ordersDao.save(listOf(newOrders))
 
-//        val userInserted = ordersWebClient.create(userToken, newOrders)
-//
-//        Log.i(TAG, "insert - userInserted: $userInserted")
+        val userInserted = ordersWebClient.create(userToken, listOf(newOrders))
+
+        Log.i(TAG, "insert - userInserted: $userInserted")
     }
 
     suspend fun update(updateOrders: Orders) {

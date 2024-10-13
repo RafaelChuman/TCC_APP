@@ -15,20 +15,26 @@ import br.univesp.tcc.webclient.model.DTOUpdateCar
 import br.univesp.tcc.webclient.model.DTOUpdateOrders
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface OrderAndItemsService {
 
     @POST("orderAndItems")
-    suspend fun create(@Body data: DTOCreateOrderAndItems): Response<OrderAndItems>
+    suspend fun create(@Header("Authorization") token: String, @Body orderAndItems: List<OrderAndItems>): Response<OrderAndItems>
 
-    @POST("orderAndItems")
-    suspend fun listByOrder(@Body data: DTOListOrderAndItemsByOrder) : Response<List<OrderAndItems>>
+    @GET("orderAndItems")
+    suspend fun listByOrder(@Header("Authorization") token: String, @Body data: DTOListOrderAndItemsByOrder) : Response<List<OrderAndItems>>
 
-    @POST("orderAndItems")
-    suspend fun listByUser(@Body userId: String) : Response<List<OrderAndItems>>
+    @GET("orderAndItems")
+    suspend fun listByUser(@Header("Authorization") token: String, @Body userId: List<String>) : Response<List<OrderAndItems>>
 
-    @POST("orderAndItems")
-    suspend fun delete(@Body data: DTODeleteOrderAndItems): Response<OrderAndItems>
+    @GET("orderAndItems")
+    suspend fun getAll(@Header("Authorization") token: String) : Response<List<OrderAndItems>>
+
+    @HTTP(method = "DELETE", path = "user", hasBody = true)
+    suspend fun delete(@Header("Authorization") token: String, @Body data: DTODeleteOrderAndItems): Response<OrderAndItems>
 
 }
