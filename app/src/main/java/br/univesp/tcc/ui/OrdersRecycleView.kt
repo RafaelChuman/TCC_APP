@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import br.univesp.tcc.database.model.Orders
 import br.univesp.tcc.database.model.OrdersCarUser
 import br.univesp.tcc.databinding.RecyclerviewOrderBinding
+import java.text.NumberFormat
+import java.time.format.DateTimeFormatterBuilder
 
 private const val TAG = "OrderRecycleView"
 
@@ -26,6 +28,8 @@ class OrdersRecycleView(
 
         private lateinit var orders: OrdersCarUser
 
+        private val fromDateToString = DateTimeFormatterBuilder().appendPattern("dd.MM.yy").toFormatter()
+
         init {
             itemView.setOnClickListener {
                 if (::orders.isInitialized) {
@@ -39,14 +43,9 @@ class OrdersRecycleView(
 
             this.orders = ord
 
-            val id = ord.orderId
             val createdAt = ord.createdAt
-            val carId = ord.carId
-            val userId = ord.userId
 
-
-            binding.textViewId.text = id
-            binding.textViewCreatedAt.text = createdAt.toString()
+            binding.textViewCreatedAt.text = fromDateToString.format(createdAt)
             binding.textViewCarColor.text = ord.color
             binding.textViewCarModel.text = ord.model
             binding.textViewCarPlate.text = ord.plate

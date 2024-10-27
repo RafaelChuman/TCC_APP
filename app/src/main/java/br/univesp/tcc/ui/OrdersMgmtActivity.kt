@@ -7,20 +7,25 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
 import br.univesp.tcc.R
 import br.univesp.tcc.database.DataSource
+import br.univesp.tcc.database.model.Car
 import br.univesp.tcc.database.model.OrderAndItems
 import br.univesp.tcc.database.model.Orders
 import br.univesp.tcc.databinding.ActivityOrdersMgmtBinding
-import br.univesp.tcc.repository.OrdersRepository
 import br.univesp.tcc.repository.OrderAndItemsRepository
+import br.univesp.tcc.repository.OrdersRepository
 import br.univesp.tcc.ui.activity.ORDERS_ID
 import br.univesp.tcc.webclient.OrderAndItemsWebClient
 import br.univesp.tcc.webclient.OrdersWebClient
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
 import java.time.LocalDateTime
+import java.util.Currency
 
 private const val TAG = "OrdersMgmtActivity"
 
@@ -31,6 +36,7 @@ class OrdersMgmtActivity : AuthBaseActivity() {
     private var ordersID: String = ""
     private var ordersSearched = Orders()
     private var orderAndItemsCreated = mutableListOf<OrderAndItems>()
+    private val format = NumberFormat.getCurrencyInstance()
 
     private val recycleViewAdapter by lazy {
         OrdersItemRecycleView(this)
@@ -79,19 +85,21 @@ class OrdersMgmtActivity : AuthBaseActivity() {
             addItem()
         }
 
+        format.maximumFractionDigits = 2
+        format.currency = Currency.getInstance("BRL")
+
         configRecyclerView()
 
         setSupportActionBar(binding.toolbar)
 
         setContentView(binding.root)
 
-        lifecycleScope.launch() {
-            launch {
-                getOrdersID()
-            }
-            launch {
-                setCarOnSpinner()
-            }
+        lifecycleScope.launch {
+            getOrdersID()
+        }
+
+        lifecycleScope.launch {
+            setCarOnSpinner()
         }
     }
 
@@ -119,6 +127,20 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         return super.onOptionsItemSelected(menu)
     }
 
+    private fun getTotal(){
+
+        var total = 0.0
+        val totalText = binding.textInputEditTextTotal
+
+        if(orderAndItemsCreated.isNotEmpty()) {
+            orderAndItemsCreated.map { item ->
+                total += ((item.quantity * item.price) - item.discount)
+            }
+        }
+
+        totalText.setText(format.format(total))
+    }
+
 
     private suspend fun getOrdersID() {
         ordersID = intent.getStringExtra(ORDERS_ID) ?: ""
@@ -128,14 +150,26 @@ class OrdersMgmtActivity : AuthBaseActivity() {
 
         val ordersList = ordersRepository.getById(ordersID)
 
-        if (ordersList.isNullOrEmpty()) return
+        if (ordersList.isNullOrEmpty())
+        {
+            binding.recyclerView.visibility = View.GONE
+            binding.textInputEditTextMessage.visibility = View.VISIBLE
+            return
+        }
 
         ordersSearched = ordersList.first()
+
+        binding.textInputEditTextStatusExecution.visibility = View.VISIBLE
+        binding.textInputEditTextStatusOrder.visibility = View.VISIBLE
+        binding.textInputEditTextMessage.visibility = View.GONE
 
         binding.textInputEditTextKm.setText(ordersSearched.km.toString())
         binding.textInputEditTextFuel.setText(ordersSearched.fuel.toString())
         binding.textInputEditTextStatusExecution.setText(ordersSearched.statusExecution.toString())
         binding.textInputEditTextStatusOrder.setText(ordersSearched.statusOrder.toString())
+
+        selectedIdOnSpinner = ordersSearched.carId
+        selectedIdOnSpinnerClient = ordersSearched.userId
 
         //Procedure to Get All Items from Order and Sync With the mais Val OrderList
         //The main val is used to sync the recycleView of Items
@@ -148,40 +182,48 @@ class OrdersMgmtActivity : AuthBaseActivity() {
 
         binding.recyclerView.visibility = View.VISIBLE
         recycleViewAdapter.update(orderAndItemsCreated)
+
+        getTotal()
     }
 
     private suspend fun setCarOnSpinner() {
 
         val spinner = binding.spinnerCar
 
-        carDao.getAll().filterNotNull().collect { group ->
+        val car = carDao.getAll().firstOrNull()
 
-            val spinnerAdapter =
-                ArrayAdapter(this, android.R.layout.simple_spinner_item, group.map { it.plate })
+        if(car.isNullOrEmpty()) return
 
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = spinnerAdapter
+        val spinnerAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, car.map { it.plate })
 
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = spinnerAdapter
 
-                    selectedIdOnSpinner = group[position].carId
-                    selectedIdOnSpinnerClient = group[position].userId
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
 
-                    Log.i(TAG, "setGroupOnSpinner: $selectedIdOnSpinner")
-                }
+                selectedIdOnSpinner = car[position].carId
+                selectedIdOnSpinnerClient = car[position].userId
 
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    selectedIdOnSpinner = group[0].carId
-                    selectedIdOnSpinnerClient = group[0].userId
-                }
+                Log.i(TAG, "setGroupOnSpinner: $selectedIdOnSpinner")
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedIdOnSpinner = car[0].carId
+                selectedIdOnSpinnerClient = car[0].userId
             }
         }
+
+        val selectedPlate = car.find { it -> it.carId ==  selectedIdOnSpinner }
+        if(selectedPlate == null) return
+        val position = spinnerAdapter.getPosition(selectedPlate.plate)
+        spinner.setSelection(position)
     }
 
 
@@ -263,8 +305,6 @@ class OrdersMgmtActivity : AuthBaseActivity() {
 
         Log.i(TAG, "createNewOrderAndItems")
 
-        val updateAt = LocalDateTime.now()
-
         val description = binding.textInputEditTextDescription.text.toString()
         val quantity = binding.textInputEditTextQuantity.text.toString()
         val price = binding.textInputEditTextPrice.text.toString()
@@ -302,6 +342,8 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         Log.i(TAG, "addItem - orderAndItemsCreated: $orderAndItemsCreated")
         binding.recyclerView.visibility = View.VISIBLE
         recycleViewAdapter.update(orderAndItemsCreated)
+
+        getTotal()
     }
 
 
@@ -310,7 +352,7 @@ class OrdersMgmtActivity : AuthBaseActivity() {
         recycleViewAdapter.ordersItemOnClickEvent= { orderAndItems ->
 
             Log.i(TAG, "configRecyclerView - orderAndItems: $orderAndItems")
-            val position = orderAndItemsCreated.indexOf(orderAndItems)
+            orderAndItemsCreated.indexOf(orderAndItems)
             orderAndItemsCreated.remove(orderAndItems)
             recycleViewAdapter.update(orderAndItemsCreated)
             Log.i(TAG, "configRecyclerView - orderAndItemsCreated: $orderAndItemsCreated")

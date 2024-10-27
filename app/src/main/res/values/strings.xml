@@ -73,6 +73,11 @@
     <string name="quantity">Quantidade\n</string>
     <string name="addItem">Adicionar Item</string>
     <string name="price">Valor</string>
+    <string name="ServiceProfit">Lucro Orçamentos</string>
+    <string name="WorkProfit">Lucro Mão de Obra</string>
+    <string name="ServiceOpen">Serviços em Aberto</string>
+    <string name="ServiceMonth">Serviços Realizados no Mês</string>
+    <string name="Total">Total</string>
 
 
 </resources>

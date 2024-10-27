@@ -6,11 +6,14 @@ import br.univesp.tcc.database.dao.OrderAndItemsDAO
 import br.univesp.tcc.database.model.OrderAndItems
 import br.univesp.tcc.database.model.Orders
 import br.univesp.tcc.database.model.OrdersCarUser
+import br.univesp.tcc.database.model.Total
 import br.univesp.tcc.extensions.dataStore
 import br.univesp.tcc.extensions.tokenDataStore
 import br.univesp.tcc.webclient.OrderAndItemsWebClient
 import br.univesp.tcc.webclient.model.DTODeleteOrders
 import kotlinx.coroutines.flow.firstOrNull
+import java.time.LocalDate
+import java.time.Month
 
 private const val TAG = "OrderAndItemsRepository"
 
@@ -34,7 +37,7 @@ class OrderAndItemsRepository(
 
     suspend fun getOrderItems(orderId : String): List<OrderAndItems>? {
 
-        syncOrderAndItems()
+        //syncOrderAndItems()
 
         //val userToken = getToken()
 
@@ -183,4 +186,57 @@ class OrderAndItemsRepository(
         val ordersDeleted = orderItemsWebClient.purgeByOrderId(userToken, orderIdList)
         Log.i(TAG, "purgeByOrderId - ordersDeleted: $ordersDeleted")
     }
+
+    suspend fun getProfitCurrentMonth(): Total {
+        Log.i(TAG, "getProfitByMonth")
+
+        val month = LocalDate.now().monthValue - 5
+        Log.i(TAG, "getProfitByMonth - month: ${month.toString()}")
+
+        val data = orderItemsDao.getProfitByMonth(month) ?: Total()
+        Log.i(TAG, "getProfitByMonth - data: ${data.toString()}")
+
+        return data
+    }
+
+    suspend fun getLiquidProfitCurrentMonth(): Total {
+        Log.i(TAG, "getLiquidProfitCurrentMonth")
+
+        val month = LocalDate.now().monthValue - 5
+        Log.i(TAG, "getLiquidProfitCurrentMonth - month: ${month.toString()}")
+
+        val data = orderItemsDao.getLiquidProfitByMonth(month) ?: Total()
+        Log.i(TAG, "getLiquidProfitCurrentMonth - data: ${data.toString()}")
+
+        return data
+    }
+
+
+    suspend fun getOrdersNumberMonth(): Total {
+        Log.i(TAG, "getOrdersNumberMonth")
+
+        val month = LocalDate.now().monthValue - 5
+        Log.i(TAG, "getOrdersNumberMonth - month: ${month.toString()}")
+
+        val data = orderItemsDao.getOrdersNumberMonth(month) ?: Total()
+        Log.i(TAG, "getOrdersNumberMonth - data: ${data.toString()}")
+
+        return data
+    }
+
+
+    suspend fun getOrdersNotFinishedMonth(): Total {
+        Log.i(TAG, "getOrdersNotFinishedMonth")
+
+        val month = LocalDate.now().monthValue - 5
+        Log.i(TAG, "getOrdersNotFinishedMonth - month: ${month.toString()}")
+
+        val data = orderItemsDao.getOrdersNotFinishedMonth(month) ?: Total()
+        Log.i(TAG, "getOrdersNotFinishedMonth - data: ${data.toString()}")
+
+        return data
+    }
+
+
+
 }

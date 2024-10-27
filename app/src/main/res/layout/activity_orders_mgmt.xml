@@ -33,6 +33,13 @@
             android:layout_height="wrap_content"
             tools:context=".ui.activity.IotMgmtForm">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/description"
+                android:inputType="text" />
+
             <Spinner
                 android:id="@+id/spinner_car"
                 android:layout_width="0dp"
@@ -216,6 +223,28 @@
                 app:spanCount="1"
                 tools:itemCount="10"
                 tools:listitem="@layout/recyclerview_orders_item" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_total"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:layout_constraintWidth_percent="0.50"
+                app:layout_constraintEnd_toEndOf="@id/recyclerView"
+                app:layout_constraintTop_toBottomOf="@id/recyclerView">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditText_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/Total"
+                    android:enabled="false"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

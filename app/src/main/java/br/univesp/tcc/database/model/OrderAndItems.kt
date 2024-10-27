@@ -62,3 +62,23 @@ class OrderAndItems() {
         return ("$name , $price")
     }
 }
+
+
+class Total() {
+    var month: String
+    var year: String
+    var yearNow: String
+    var total: Double
+
+    init {
+        month = ""
+        year = ""
+        yearNow = ""
+        total = 0.0
+    }
+
+
+    override fun toString(): String {
+        return ("$month , $total")
+    }
+}

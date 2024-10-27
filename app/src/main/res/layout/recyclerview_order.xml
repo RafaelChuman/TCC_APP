@@ -21,34 +21,23 @@
             android:layout_height="match_parent"
             android:minHeight="200dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-                <TextView
-                    android:id="@+id/textView_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/id"/>
-            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_createdAt"
+                android:id="@+id/textInputLayout_carPlate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@id/textInputLayout_id"
-                app:layout_constraintStart_toStartOf="@id/textInputLayout_id"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_id">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <TextView
-                    android:id="@+id/textView_createdAt"
+                    android:id="@+id/textView_carPlate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/date"/>
+                    android:textSize="24sp"
+                    android:hint="@string/plate"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -56,9 +45,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@id/textInputLayout_createdAt"
-                app:layout_constraintStart_toStartOf="@id/textInputLayout_createdAt"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_createdAt">
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_carPlate"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_carPlate"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_carPlate">
                 <TextView
                     android:id="@+id/textView_carModel"
                     android:layout_width="match_parent"
@@ -67,28 +56,13 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_carPlate"
+                android:id="@+id/textInputLayout_carColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="@id/textInputLayout_carModel"
                 app:layout_constraintStart_toStartOf="@id/textInputLayout_carModel"
                 app:layout_constraintTop_toBottomOf="@id/textInputLayout_carModel">
-                <TextView
-                    android:id="@+id/textView_carPlate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/plate"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_carColor"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="@id/textInputLayout_carPlate"
-                app:layout_constraintStart_toStartOf="@id/textInputLayout_carPlate"
-                app:layout_constraintTop_toBottomOf="@id/textInputLayout_carPlate">
                 <TextView
                     android:id="@+id/textView_carColor"
                     android:layout_width="match_parent"
@@ -125,6 +99,32 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/cellphone"/>
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_createdAt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="@id/textInputLayout_userCellphone"
+                app:layout_constraintStart_toStartOf="@id/textInputLayout_userCellphone"
+                app:layout_constraintTop_toBottomOf="@id/textInputLayout_userCellphone">
+
+                <TextView
+                    android:id="@+id/textView_createdAt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+
+
+
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

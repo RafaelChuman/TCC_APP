@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.univesp.tcc.database.model.OrderAndItems
 import br.univesp.tcc.databinding.RecyclerviewOrdersItemBinding
+import java.text.NumberFormat
+import java.util.Currency
 
 private const val TAG = "OrdersItemRecycleView"
 
@@ -18,12 +20,16 @@ class OrdersItemRecycleView(
 
     private val orderAndItems = orderAndItemsList.toMutableList()
 
+
     inner class ViewHolder(
         private val binding: RecyclerviewOrdersItemBinding,
         private val ordersItemOnClickEvent: (item: OrderAndItems) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var orderAndItems: OrderAndItems
+        private val format = NumberFormat.getCurrencyInstance()
+
+
 
         init {
             itemView.setOnClickListener {
@@ -36,6 +42,9 @@ class OrdersItemRecycleView(
         fun associateItem(itm: OrderAndItems) {
             Log.i(TAG, "associateItem - usr: $itm")
 
+            format.maximumFractionDigits = 2
+            format.currency = Currency.getInstance("BRL")
+
             this.orderAndItems = itm
 
             val name = itm.name
@@ -44,7 +53,7 @@ class OrdersItemRecycleView(
 
 
             binding.textViewName.text = name
-            binding.textViewPrice.text = price.toString()
+            binding.textViewPrice.text = format.format(price)
             binding.textViewQuantity.text = quantity.toString()
         }
     }

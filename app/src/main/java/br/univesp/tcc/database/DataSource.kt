@@ -17,10 +17,6 @@ import br.univesp.tcc.database.model.OrderAndItems
 import br.univesp.tcc.database.model.Orders
 import br.univesp.tcc.database.model.User
 import br.univesp.tcc.database.model.UserToken
-import com.squareup.moshi.Moshi
-import retrofit2.converter.moshi.MoshiConverterFactory
-import com.squareup.moshi.JsonAdapter;
-import java.time.LocalDateTime
 
 
 @Database(
@@ -28,7 +24,7 @@ import java.time.LocalDateTime
     entities = [User::class, Car::class, Item::class, Orders::class, OrderAndItems::class, UserToken::class],
     exportSchema = true
 )
-@TypeConverters(LocalDateTimeConverter::class) // Adiciona os conversores
+@TypeConverters(RoomConverterLocalDateTime::class) // Adiciona os conversores
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun UserDao(): UserDao

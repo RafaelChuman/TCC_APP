@@ -14,7 +14,7 @@
         <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
         <item name="colorOnSecondary">@color/popOs_textBox_text_500</item>
 
-        <item name="android:windowBackground">@color/popOs_background_500</item>
+        <item name="android:windowBackground">@color/popOs_background_300</item>
 
         <item name="textInputStyle">@style/CustomTextInputStyle</item>
         <item name="android:textViewStyle">@style/CustomTextViewStyle</item>
@@ -38,8 +38,8 @@
     </style>
 
     <style name="CustomTextViewStyle" parent="Widget.AppCompat.TextView">
-        <item name="android:background">@color/popOs_textBox_background_500</item>
-        <item name="android:textColorHint">@color/popOs_textBox_text_500</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/popOs_textBox_text_500</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -76,10 +76,10 @@
 
     <style name="CustomCardView" parent="Widget.MaterialComponents.CardView">
         <item name="android:background">@color/transparent</item>
-        <item name="android:backgroundTint">@color/popOs_background_300</item>
-        <item name="cardCornerRadius">8dp</item>
-        <item name="strokeColor">@color/popOs_border_500</item>
-        <item name="strokeWidth">8dp</item>
+        <item name="android:backgroundTint">@color/popOs_background_500</item>
+        <item name="cardCornerRadius">0dp</item>
+        <item name="strokeColor">@color/black</item>
+        <item name="strokeWidth">1dp</item>
     </style>
 
     <style name="CustomButton" parent="Widget.MaterialComponents.Button.TextButton">
